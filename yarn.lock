@@ -273,10 +273,10 @@
   resolved "https://registry.yarnpkg.com/@juggle/resize-observer/-/resize-observer-3.4.0.tgz#08d6c5e20cf7e4cc02fd181c4b0c225cd31dbb60"
   integrity sha512-dfLbk+PwWvFzSxwk3n5ySL0hfBog779o8h68wK/7/APo/7cgyWp5jcXockbxdk5kFRkbeXWm4Fbi9FrdN381sA==
 
-"@mrii/react-form-builder@^1.0.1":
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/@mrii/react-form-builder/-/react-form-builder-1.0.1.tgz#a577a96bc8f34ee388c8a8655c43a2cfb06d761b"
-  integrity sha512-WsN85XVM1AduUItTCH6tpUWo6v68zJq6huEsxC1+IkBneDRAlBl3M7KJQrKBbZezXGX1NXmwPdU1sXXJELP9xA==
+"@mrii/react-form-builder@^1.0.2":
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/@mrii/react-form-builder/-/react-form-builder-1.0.2.tgz#727fa228574b5208d247ed5e3048bd6801c1a766"
+  integrity sha512-Zhe0dygmdM5EUxRdTe1n6HJC5A6vMDT2zdOFyovd8fcWt2QwlbYRrfbcUgOaTG9X8aFnC3MwAFB2ac6savOhkw==
 
 "@mrii/react-table-builder@^0.0.3":
   version "0.0.3"

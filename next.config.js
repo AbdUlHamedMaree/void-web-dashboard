@@ -1,3 +1,5 @@
+const resources = ['users'];
+
 /** @type {import('next').NextConfig} */
 module.exports = {
   reactStrictMode: true,
@@ -7,5 +9,15 @@ module.exports = {
   },
   typescript: {
     ignoreBuildErrors: true,
+  },
+
+  async redirects() {
+    return [
+      ...resources.map(resource => ({
+        source: `/dashboard/${resource}`,
+        destination: `/dashboard/${resource}/list`,
+        permanent: true,
+      })),
+    ];
   },
 };

@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { NextPage } from 'next';
+import type { NextPage } from 'next';
 import { DashboardLayout } from '$ui/components/layouts/dashboard';
 import { Box, Button, Container, Typography } from '@mui/material';
 import { Add } from '@mui/icons-material';
@@ -8,6 +8,7 @@ import { routes } from '$routes';
 import TableBuilder, { TextColumn } from '@mrii/react-table-builder';
 import { mockUser } from '$logic/models/user';
 import { array, number } from '@scandinavia/mock';
+import { ActionsColumn } from '$ui/components/dumb/action-column';
 
 type PageProps = {};
 
@@ -32,7 +33,7 @@ const Page: NextPage<PageProps> = () => {
         </Button>
       </Box>
       <TableBuilder
-        rows={users}
+        rows={[]}
         sx={{ mt: 4, height: 'calc(100vh - 250px)', minHeight: 400 }}
         initialState={{
           columns: { columnVisibilityModel: { id: false } },
@@ -44,6 +45,7 @@ const Page: NextPage<PageProps> = () => {
         <TextColumn source='email' />
         <TextColumn source='role' />
         <TextColumn source='phoneNumber' />
+        <ActionsColumn />
       </TableBuilder>
     </Container>
   );

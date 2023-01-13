@@ -1,8 +1,6 @@
 import { Typography } from '@mui/material';
 
-export type SplashScreenProps = {
-  children?: React.ReactNode;
-};
+export type SplashScreenProps = {};
 
 export const SplashScreen: React.FC<SplashScreenProps> = () => {
   return (

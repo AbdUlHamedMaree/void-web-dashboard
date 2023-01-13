@@ -1,11 +1,11 @@
 import React from 'react';
-import { NextPage } from 'next';
+import type { NextPage } from 'next';
 import { DashboardLayout } from '$ui/components/layouts/dashboard';
 
 type PageProps = {};
 
 const Page: NextPage<PageProps> = () => {
-  return <div>Users</div>;
+  return <div>View</div>;
 };
 
 Page.layout = DashboardLayout;

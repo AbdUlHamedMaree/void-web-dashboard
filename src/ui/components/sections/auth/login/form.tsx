@@ -24,7 +24,7 @@ export const AuthLoginFormSection: React.FC = () => {
   const schema = useMemo(
     () =>
       object({
-        email: string().email().required(),
+        email: string().email().trim().required(),
         password: string().min(8).required(),
       }),
     []
