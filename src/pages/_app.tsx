@@ -21,19 +21,19 @@ const url = process.env.NEXT_PUBLIC_SITE_URL!;
 
 export const DefaultSeoProps: NextSeoProps = {
   canonical: url,
-  titleTemplate: '%s Dubai, UAE - Pizza',
-  defaultTitle: 'Pizza: The Best Pizza Agency in Dubai, UAE',
+  titleTemplate: '%s Dubai, UAE - Void',
+  defaultTitle: 'Void: The Best Void Agency in Dubai, UAE',
   description:
-    'Pizza is a pizza agency in Dubai, UAE. We build websites, mobile apps, brands, and marketing campaigns full of creativity and innovation.',
+    'Void is the best agency in Dubai, UAE. We build websites, mobile apps, brands, and marketing campaigns full of creativity and innovation.',
   openGraph: {
     type: 'website',
     locale: 'en_AE',
     url: url,
-    site_name: 'Pizza',
+    site_name: 'Void',
     images: [
       {
         url: `${url}/assets/logo/logo-portrait.png`,
-        alt: 'Pizza Agency Logo',
+        alt: 'Void Agency Logo',
         width: 500,
         height: 324,
         type: 'image/png',
