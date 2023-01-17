@@ -1,5 +1,11 @@
-import { PathnameUrlObject } from '$routes';
-import { LiveTv, PeopleAltOutlined, Speed } from '@mui/icons-material';
+import type { PathnameUrlObject } from '$routes';
+import {
+  DirectionsCarOutlined,
+  LiveTv,
+  MemoryOutlined,
+  PeopleAltOutlined,
+  Speed,
+} from '@mui/icons-material';
 
 export type NavConfigItem = {
   title: string;
@@ -27,6 +33,36 @@ export const navConfig: NavConfigItem[] = [
     title: 'Users',
     path: '/dashboard/users',
     icon: <PeopleAltOutlined />,
+    children: [
+      {
+        title: 'List',
+        path: '/list',
+      },
+      {
+        title: 'Add',
+        path: '/new',
+      },
+    ],
+  },
+  {
+    title: 'Devices',
+    path: '/dashboard/devices',
+    icon: <MemoryOutlined />,
+    children: [
+      {
+        title: 'List',
+        path: '/list',
+      },
+      {
+        title: 'Add',
+        path: '/new',
+      },
+    ],
+  },
+  {
+    title: 'Vehicles',
+    path: '/dashboard/vehicles',
+    icon: <DirectionsCarOutlined />,
     children: [
       {
         title: 'List',

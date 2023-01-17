@@ -1,5 +1,6 @@
 // material
-import { Popover, PopoverProps, SxProps, Theme } from '@mui/material';
+import type { PopoverProps, SxProps, Theme } from '@mui/material';
+import { Popover } from '@mui/material';
 import { alpha, styled } from '@mui/material/styles';
 
 const ArrowStyle = styled('span')(({ theme }) => ({

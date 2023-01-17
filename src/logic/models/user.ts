@@ -11,9 +11,16 @@ export type UserModel = {
 export enum AppRoleEnum {
   ADMIN = 'ADMIN',
   MANAGER = 'MANAGER',
+  DRIVER = 'DRIVER',
 }
 
 export type AppRoleUnion = keyof typeof AppRoleEnum;
+
+export const AppRoleToReadable: Record<AppRoleUnion, string> = {
+  ADMIN: 'Admin',
+  DRIVER: 'Driver',
+  MANAGER: 'Manager',
+};
 
 export const mockUser = (user?: Partial<UserModel>): UserModel => ({
   id: m.unique(3),

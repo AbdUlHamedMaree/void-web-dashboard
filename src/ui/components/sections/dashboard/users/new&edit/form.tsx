@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { Box, Container, Grid, Paper, Typography } from '@mui/material';
+import { Box, Card, Container, Grid, Typography } from '@mui/material';
 import type { DefaultValues } from '@mrii/react-form-builder';
 import {
   FormBuilder,
@@ -8,6 +8,7 @@ import {
   TextInput,
 } from '@mrii/react-form-builder';
 import type { AppRoleUnion } from '$logic/models/user';
+import { AppRoleToReadable } from '$logic/models/user';
 import { AppRoleEnum } from '$logic/models/user';
 import { object, string } from 'yup';
 import type { SubmitHandler } from 'react-hook-form';
@@ -56,10 +57,10 @@ export const DashboardUsersNewEditForm: React.FC<DashboardUsersNewEditFormProps>
 
   return (
     <Container maxWidth='lg'>
-      <Typography variant='h4' fontWeight='medium'>
+      <Typography variant='h4'>
         {isNew ? 'New User' : `Edit User "${defaultValues?.name}"`}
       </Typography>
-      <Paper elevation={2} sx={{ mt: 3, p: 2 }}>
+      <Card sx={{ mt: 3, p: 2 }}>
         <FormBuilder<FormFields>
           validation={schema}
           onSubmit={onSubmit}
@@ -73,11 +74,7 @@ export const DashboardUsersNewEditForm: React.FC<DashboardUsersNewEditFormProps>
               <TextInput name='email' fullWidth />
             </Grid>
             <Grid md={6} xs={12} item>
-              <SelectInput
-                name='role'
-                items={{ [AppRoleEnum.ADMIN]: 'Admin', [AppRoleEnum.MANAGER]: 'Manager' }}
-                fullWidth
-              />
+              <SelectInput name='role' items={AppRoleToReadable} fullWidth />
             </Grid>
             <Grid md={6} xs={12} item>
               <TextInput name='phoneNumber' fullWidth />
@@ -90,7 +87,7 @@ export const DashboardUsersNewEditForm: React.FC<DashboardUsersNewEditFormProps>
             </FormSubmitInput>
           </Box>
         </FormBuilder>
-      </Paper>
+      </Card>
     </Container>
   );
 };

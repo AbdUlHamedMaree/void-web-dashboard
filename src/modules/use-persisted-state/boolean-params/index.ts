@@ -2,7 +2,8 @@
 import { isString } from '$modules/checks';
 import { useRouter } from 'next/router';
 import { useCallback, useMemo } from 'react';
-import { usePersistedState, UsePersistedStateOptions } from '../core';
+import type { UsePersistedStateOptions } from '../core';
+import { usePersistedState } from '../core';
 
 export const useBooleanParamsState = <T extends boolean>(
   name: string,

@@ -1,5 +1,5 @@
 import React from 'react';
-import { UrlObject } from 'url';
+import type { UrlObject } from 'url';
 
 export type AuthGuardProps = {
   unAuthRedirectUrl?: UrlObject | string;

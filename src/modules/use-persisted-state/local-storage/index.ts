@@ -1,5 +1,6 @@
 import { isStringFull } from '$modules/checks';
-import { usePersistedState, UsePersistedStateOptions } from '../core';
+import type { UsePersistedStateOptions } from '../core';
+import { usePersistedState } from '../core';
 
 const options: Required<UsePersistedStateOptions> = {
   setItem: (name, value) => {

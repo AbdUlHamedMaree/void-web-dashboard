@@ -1,4 +1,4 @@
-import { UrlObject } from 'url';
+import type { UrlObject } from 'url';
 
 export type ResolvedUrlObject = {
   [K in keyof UrlObject]: Exclude<UrlObject[K], null>;
@@ -23,7 +23,27 @@ export type AppRoutesMap = {
   };
   dashboard: {
     index: PathnameUrlObjectFunction;
+    devices: {
+      '[id]': {
+        edit: PathnameUrlObjectFunction;
+        view: PathnameUrlObjectFunction;
+      };
+      list: PathnameUrlObjectFunction;
+      new: PathnameUrlObjectFunction;
+    };
     users: {
+      '[id]': {
+        edit: PathnameUrlObjectFunction;
+        view: PathnameUrlObjectFunction;
+      };
+      list: PathnameUrlObjectFunction;
+      new: PathnameUrlObjectFunction;
+    };
+    vehicles: {
+      '[id]': {
+        edit: PathnameUrlObjectFunction;
+        view: PathnameUrlObjectFunction;
+      };
       list: PathnameUrlObjectFunction;
       new: PathnameUrlObjectFunction;
     };

@@ -1,6 +1,7 @@
 import { useCallback, useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
 import { alpha, useTheme, styled } from '@mui/material/styles';
+import type { BoxProps, ListItemButtonProps, SvgIconProps } from '@mui/material';
 import {
   Box,
   List,
@@ -8,17 +9,15 @@ import {
   ListItemText,
   ListItemIcon,
   ListItemButton,
-  BoxProps,
-  ListItemButtonProps,
-  SvgIconProps,
 } from '@mui/material';
 
-import { NavConfigItem } from '../layouts/dashboard/nav-config';
-import { PathnameUrlObject } from '$routes';
+import type { NavConfigItem } from '../layouts/dashboard/nav-config';
+import type { PathnameUrlObject } from '$routes';
 import { getPathname } from '$logic/utils/get-pathname';
 import { NextLinkComposed } from './link';
 import joinUrls from 'url-join';
-import { KeyboardArrowDown, SvgIconComponent } from '@mui/icons-material';
+import type { SvgIconComponent } from '@mui/icons-material';
+import { KeyboardArrowDown } from '@mui/icons-material';
 
 const RotateIcon = styled(
   ({

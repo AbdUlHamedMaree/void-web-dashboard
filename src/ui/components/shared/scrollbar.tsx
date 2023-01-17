@@ -1,7 +1,10 @@
-import SimpleBarReact, { Props as SimpleBarReactProps } from 'simplebar-react';
+import type { Props as SimpleBarReactProps } from 'simplebar-react';
+import SimpleBarReact from 'simplebar-react';
 import { alpha, styled } from '@mui/material/styles';
-import { Box, BoxProps, SxProps, Theme } from '@mui/material';
-import React, { Ref, useMemo } from 'react';
+import type { BoxProps, SxProps, Theme } from '@mui/material';
+import { Box } from '@mui/material';
+import type { Ref } from 'react';
+import React, { useMemo } from 'react';
 import { isMobile } from '$modules/checks';
 
 const RootStyle = styled('div')(() => ({

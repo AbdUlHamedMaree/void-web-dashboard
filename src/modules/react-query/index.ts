@@ -1,19 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { mergeFunctions } from '$modules/utils';
-import axios, {
-  AxiosError,
-  AxiosInstance,
-  AxiosRequestConfig,
-  AxiosResponse,
-} from 'axios';
+import type { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
+import axios from 'axios';
 import { useCallback, useMemo } from 'react';
-import {
-  useQuery as useBaseQuery,
-  useMutation as useBaseMutation,
+import type {
   UseQueryOptions,
   UseMutationOptions,
   UseMutateAsyncFunction,
 } from 'react-query';
+import { useQuery as useBaseQuery, useMutation as useBaseMutation } from 'react-query';
 
 export type AxiosRequestConfigWithTypes<
   TData = any,

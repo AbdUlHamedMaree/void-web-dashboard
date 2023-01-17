@@ -1,4 +1,4 @@
-import { GetState, SetState, StoreApi } from 'zustand';
+import type { GetState, SetState, StoreApi } from 'zustand';
 
 export type AnyObject = Record<string, unknown>;
 

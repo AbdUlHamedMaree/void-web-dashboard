@@ -1,6 +1,6 @@
-import { Components } from '@mui/material';
+import type { ThemeComponent } from '$logic/types';
 
-export const MuiCssBaseline: Components['MuiCssBaseline'] = {
+export const MuiCssBaseline: ThemeComponent<'MuiCssBaseline'> = theme => ({
   styleOverrides: {
     '*': {
       margin: 0,
@@ -35,5 +35,10 @@ export const MuiCssBaseline: Components['MuiCssBaseline'] = {
       display: 'block',
       maxWidth: '100%',
     },
+    // for DataGrid
+    '.MuiDataGrid-columnHeaders': {
+      color: theme.palette.text.secondary,
+      backgroundColor: theme.palette.background.neutral,
+    },
   },
-};
+});

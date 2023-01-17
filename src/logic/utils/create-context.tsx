@@ -6,7 +6,7 @@ export type CreateContextProviderProps<TState> = React.PropsWithChildren<{
   value: TState;
 }>;
 
-const createContext = <TState,>() => {
+export const createContext = <TState,>() => {
   const BaseContext = reactCreateContext<TState | undefined>(undefined);
   const Provider = ({ value, children }: CreateContextProviderProps<TState>) => {
     return <BaseContext.Provider value={value}>{children}</BaseContext.Provider>;
@@ -24,5 +24,3 @@ const createContext = <TState,>() => {
 
   return [Provider, useProps] as const;
 };
-
-export { createContext };

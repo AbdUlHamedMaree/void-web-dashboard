@@ -273,15 +273,15 @@
   resolved "https://registry.yarnpkg.com/@juggle/resize-observer/-/resize-observer-3.4.0.tgz#08d6c5e20cf7e4cc02fd181c4b0c225cd31dbb60"
   integrity sha512-dfLbk+PwWvFzSxwk3n5ySL0hfBog779o8h68wK/7/APo/7cgyWp5jcXockbxdk5kFRkbeXWm4Fbi9FrdN381sA==
 
-"@mrii/react-form-builder@^1.0.2":
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/@mrii/react-form-builder/-/react-form-builder-1.0.2.tgz#727fa228574b5208d247ed5e3048bd6801c1a766"
-  integrity sha512-Zhe0dygmdM5EUxRdTe1n6HJC5A6vMDT2zdOFyovd8fcWt2QwlbYRrfbcUgOaTG9X8aFnC3MwAFB2ac6savOhkw==
+"@mrii/react-form-builder@^1.0.3":
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/@mrii/react-form-builder/-/react-form-builder-1.0.3.tgz#a309023186bc3fc086a43706ac38b5a122b30010"
+  integrity sha512-22lLfjowtLFAYO4vbG9nEv/O4zaGbC2S8Qx5+lJvvenTXR4GtNb3AwlOySJ6XhfZHJcEvZCCVMUPr3XJTre7HQ==
 
-"@mrii/react-table-builder@^0.0.3":
-  version "0.0.3"
-  resolved "https://registry.yarnpkg.com/@mrii/react-table-builder/-/react-table-builder-0.0.3.tgz#8469871f09551313b16346ae71cae216593a7625"
-  integrity sha512-5IEhgr7/qlRRjFeY4DiDhOG2e3xvHokmhN7M/yaOGfBsa7BxMujq2sow2+APjtrK+oarzU+ozGTzspCuSz03ew==
+"@mrii/react-table-builder@^0.0.5":
+  version "0.0.5"
+  resolved "https://registry.yarnpkg.com/@mrii/react-table-builder/-/react-table-builder-0.0.5.tgz#fa865d61af843d1557b3d15337748a7858e125e8"
+  integrity sha512-anl3XMIt6b+VSkBDqzVcJywUgO1SPowMvQz+K4HoOpZalevMUsW+8fJ7EXA6qXOBxJrVk0UJQutbykmHQgHcGg==
 
 "@mui/base@5.0.0-alpha.113":
   version "5.0.0-alpha.113"
@@ -956,6 +956,11 @@ chalk@^4.0.0, chalk@^4.1.0:
     ansi-styles "^4.1.0"
     supports-color "^7.1.0"
 
+chalk@^5.2.0:
+  version "5.2.0"
+  resolved "https://registry.yarnpkg.com/chalk/-/chalk-5.2.0.tgz#249623b7d66869c673699fb66d65723e54dfcfb3"
+  integrity sha512-ree3Gqw/nazQAPuJJEy+avdl7QfZMcUvmHIKgEZkGL+xOBzRvup5Hxo6LHuMceSxOabuJLJm5Yp/92R9eMmMvA==
+
 client-only@0.0.1:
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/client-only/-/client-only-0.0.1.tgz#38bba5d403c41ab150bff64a95c85013cf73bca1"
@@ -1059,7 +1064,14 @@ cosmiconfig@^7.0.0:
     path-type "^4.0.0"
     yaml "^1.10.0"
 
-cross-spawn@^7.0.2, cross-spawn@^7.0.3:
+cross-env@^7.0.3:
+  version "7.0.3"
+  resolved "https://registry.yarnpkg.com/cross-env/-/cross-env-7.0.3.tgz#865264b29677dc015ba8418918965dd232fc54cf"
+  integrity sha512-+/HKd6EgcQCJGh2PSjZuUitQBQynKor4wrFbRg4DtAgS1aWO+gU52xpH7M9ScGgXSYmAVS9bIJ8EzuaGw0oNAw==
+  dependencies:
+    cross-spawn "^7.0.1"
+
+cross-spawn@^7.0.1, cross-spawn@^7.0.2, cross-spawn@^7.0.3:
   version "7.0.3"
   resolved "https://registry.yarnpkg.com/cross-spawn/-/cross-spawn-7.0.3.tgz#f73a85b9d5d41d045551c177e2882d4ac85728a6"
   integrity sha512-iRDPJKUPVEND7dHPO8rkbOnPpyDygcDFtWjpeWNCgy8WP2rXcxXL8TskReQl6OrB2G7+UJrags1q15Fudc7G6w==

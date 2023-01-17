@@ -1,46 +1,28 @@
-import { Color } from '$logic/types/color';
-import {
-  createTheme,
-  PaletteColorOptions,
-  responsiveFontSizes,
-} from '@mui/material/styles';
-import { primaryPalette } from './primary';
+import { createTheme } from '@mui/material/styles';
 import { components } from './components';
+import { shadows } from './shadows';
+import { palette } from './palette';
+import { customShadows } from './custom-shadows';
+import { typography } from './typography';
 
-const colorToPaletteColor = (color: Color): PaletteColorOptions => ({
-  ...color,
-  A100: color[100],
-  A200: color[200],
-  A400: color[400],
-  A700: color[700],
-  light: color[300],
-  main: color[400],
-  dark: color[500],
+declare module '@mui/material' {
+  interface ThemeOptions {
+    customShadows?: typeof customShadows;
+  }
+  interface Theme {
+    customShadows: typeof customShadows;
+  }
+}
+
+export const theme = createTheme({
+  palette,
+  shape: {
+    borderRadius: 8,
+  },
+  typography,
+
+  shadows,
+  customShadows,
 });
 
-export const theme = responsiveFontSizes(
-  createTheme({
-    typography: {
-      fontFamily: "'Open Sans', 'Cairo', sans-serif",
-    },
-    palette: {
-      primary: colorToPaletteColor(primaryPalette),
-      info: {
-        main: '#0984e3',
-      },
-      success: {
-        main: '#00b894',
-      },
-      warning: {
-        main: '#fdcb6e',
-      },
-      error: {
-        main: '#d63031',
-      },
-    },
-    shape: {
-      borderRadius: 8,
-    },
-    components,
-  })
-);
+theme.components = components(theme);
