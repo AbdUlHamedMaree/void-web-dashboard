@@ -1,0 +1,10 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+yarn build
+git add .next
+
+CMD="git commit -m "
+MSG=$(echo "\"[AUTO] build ($(<.next/BUILD_ID ))\"")
+
+eval $CMD $MSG
