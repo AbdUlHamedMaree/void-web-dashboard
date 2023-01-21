@@ -1,1 +1,0 @@
-self.__REACT_LOADABLE_MANIFEST={"_app.tsx -> ../ui/components/shared/next-progress":{id:39138,files:["static/chunks/138.5acca9e2d62eea42.js"]}};
