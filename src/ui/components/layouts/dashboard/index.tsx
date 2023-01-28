@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 // material
 import { styled } from '@mui/material/styles';
 //
 import { DashboardLayoutNavbar } from './navbar';
 import { DashboardLayoutSidebar } from './sidebar';
+import { Scrollbar } from '$ui/components/shared/scrollbar';
 
 // ----------------------------------------------------------------------
 
@@ -11,31 +12,23 @@ const APP_BAR_MOBILE = 64;
 const APP_BAR_DESKTOP = 92;
 
 const RootStyle = styled('div')({
-  display: 'flex',
-  minHeight: '100%',
-  overflow: 'hidden',
+  height: '100%',
 });
 
 const MainStyle = styled('div')(({ theme }) => ({
-  flexGrow: 1,
-  overflow: 'auto',
-  minHeight: '100%',
   paddingTop: APP_BAR_MOBILE + 24,
-  // paddingBottom: theme.spacing(10),
   [theme.breakpoints.up('lg')]: {
     paddingTop: APP_BAR_DESKTOP + 24,
-    paddingLeft: theme.spacing(2),
-    paddingRight: theme.spacing(2),
   },
 }));
 
 // ----------------------------------------------------------------------
 
-export type DashboardLayoutProps = {
-  children?: React.ReactNode;
-};
+export type DashboardLayoutProps = {};
 
-export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
+export const DashboardLayout: React.FC<React.PropsWithChildren<DashboardLayoutProps>> = ({
+  children,
+}) => {
   const [open, setOpen] = useState(false);
 
   return (
@@ -45,7 +38,9 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) =>
         isOpenSidebar={open}
         onCloseSidebar={() => setOpen(false)}
       />
-      <MainStyle>{children}</MainStyle>
+      <Scrollbar>
+        <MainStyle>{children}</MainStyle>
+      </Scrollbar>
     </RootStyle>
   );
 };

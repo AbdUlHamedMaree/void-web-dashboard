@@ -1,4 +1,7 @@
+import type { LinkProps } from 'next/link';
 import type { UrlObject } from 'url';
+
+export type NextUrl = LinkProps['href'];
 
 export type ResolvedUrlObject = {
   [K in keyof UrlObject]: Exclude<UrlObject[K], null>;

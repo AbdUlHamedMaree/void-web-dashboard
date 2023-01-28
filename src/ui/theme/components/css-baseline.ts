@@ -10,10 +10,6 @@ export const MuiCssBaseline: ThemeComponent<'MuiCssBaseline'> = theme => ({
     html: {
       WebkitOverflowScrolling: 'touch',
     },
-    '#__next': {
-      display: 'flex',
-      flexDirection: 'column',
-    },
     'html, body, #__next': {
       width: '100%',
       height: '100%',

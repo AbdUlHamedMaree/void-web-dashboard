@@ -12,7 +12,7 @@ export type ActionsColumnProps = {
   extraActions?: ActionsColumnExtraProps['getActions'];
 };
 
-export const ActionsColumn: React.FC<ActionsColumnProps> = ({
+export const AppActionsColumn: React.FC<ActionsColumnProps> = ({
   disableShow,
   disableEdit,
   disableDelete,

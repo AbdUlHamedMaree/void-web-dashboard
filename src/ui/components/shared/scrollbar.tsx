@@ -1,60 +1,20 @@
-import type { Props as SimpleBarReactProps } from 'simplebar-react';
-import SimpleBarReact from 'simplebar-react';
-import { alpha, styled } from '@mui/material/styles';
-import type { BoxProps, SxProps, Theme } from '@mui/material';
-import { Box } from '@mui/material';
-import type { Ref } from 'react';
-import React, { useMemo } from 'react';
-import { isMobile } from '$modules/checks';
+import React, { forwardRef, memo } from 'react';
+import { styled } from '@mui/material/styles';
+import { Scrollbars } from 'react-custom-scrollbars-2';
 
-const RootStyle = styled('div')(() => ({
-  flexGrow: 1,
-  height: '100%',
-  overflow: 'hidden',
-}));
+const StyledScrollbars = styled(Scrollbars)``;
 
-const SimpleBarStyle = styled(SimpleBarReact)(({ theme }) => ({
-  maxHeight: '100%',
-  '& .simplebar-scrollbar': {
-    '&:before': {
-      backgroundColor: alpha(theme.palette.grey[600], 0.48),
-    },
-    '&.simplebar-visible:before': {
-      opacity: 1,
-    },
-  },
-  '& .simplebar-track.simplebar-vertical': {
-    width: 10,
-  },
-  '& .simplebar-track.simplebar-horizontal .simplebar-scrollbar': {
-    height: 6,
-  },
-  '& .simplebar-mask': {
-    zIndex: 'inherit',
-  },
-}));
+export type ScrollbarProps = React.ComponentProps<typeof StyledScrollbars>;
 
-export type ScrollbarProps = {
-  children?: React.ReactNode;
-  sx?: SxProps<Theme>;
-} & SimpleBarReactProps &
-  BoxProps & { ref?: Ref<SimpleBarReact>; color?: string };
-
-export const Scrollbar: React.FC<ScrollbarProps> = ({ children, ...other }) => {
-  const mobile = useMemo(() => isMobile(), []);
-  if (mobile) {
+export const Scrollbar = memo(
+  forwardRef<Scrollbars, React.PropsWithChildren<ScrollbarProps>>(function Scrollbar(
+    { children, ...props },
+    ref
+  ) {
     return (
-      <Box {...other} sx={{ overflowX: 'auto', ...other.sx }}>
+      <StyledScrollbars universal {...props} ref={ref}>
         {children}
-      </Box>
+      </StyledScrollbars>
     );
-  }
-
-  return (
-    <RootStyle>
-      <SimpleBarStyle timeout={500} clickOnTrack={false} {...other}>
-        {children as string}
-      </SimpleBarStyle>
-    </RootStyle>
-  );
-};
+  })
+);
