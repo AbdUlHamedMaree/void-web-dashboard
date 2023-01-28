@@ -19,7 +19,7 @@ export type GoogleMapsProps = React.PropsWithChildren<
   Omit<UseLoadScriptOptions, 'googleMapsApiKey'> & GoogleMapProps
 >;
 
-const GOOGLE_MAPS_API_KEY = 'AIzaSyC4R6AN7SmujjPUIGKdyao2Kqitzr1kiRg';
+const GOOGLE_MAPS_API_KEY = 'KEY';
 
 export const GoogleMaps = memo(
   forwardRef<google.maps.Map, GoogleMapsProps>(function GoogleMaps(
