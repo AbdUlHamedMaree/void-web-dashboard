@@ -1,4 +1,4 @@
-const resources = ['users'];
+const resources = ['users', 'vehicles', 'devices'];
 
 /** @type {import('next').NextConfig} */
 module.exports = {

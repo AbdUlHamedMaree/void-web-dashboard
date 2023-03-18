@@ -1,6 +1,6 @@
-import React, { forwardRef, memo } from 'react';
+import React, { forwardRef, memo, useMemo } from 'react';
 import type { MapContainerProps } from 'react-leaflet';
-import type { Map } from 'leaflet';
+import type { LatLngExpression } from 'leaflet';
 import dynamic from 'next/dynamic';
 
 import 'leaflet/dist/leaflet.css';
@@ -15,25 +15,27 @@ const TileLayer = dynamic(
   { ssr: false }
 );
 
+const center: LatLngExpression = [24.947026, 55.062373];
+
 export type MapsProps = MapContainerProps;
 
 export const Maps = memo(
-  forwardRef<Map, React.PropsWithChildren<MapsProps>>(function Maps(
+  forwardRef<any, React.PropsWithChildren<MapsProps>>(function Maps(
     { children, ...props },
     ref
   ) {
+    const style = useMemo(
+      () => ({ height: '100%', width: '100%', ...props.style }),
+      [props.style]
+    );
+
     return (
-      <MapContainer
-        ref={ref}
-        center={[51.505, -0.09]}
-        zoom={13}
-        {...props}
-        style={{ height: '100%', width: '100%', ...props.style }}
-      >
+      <MapContainer center={center} zoom={13} {...props} style={style} ref={ref}>
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
         />
+
         {children}
       </MapContainer>
     );

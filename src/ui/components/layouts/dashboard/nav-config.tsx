@@ -1,10 +1,10 @@
 import type { PathnameUrlObject } from '$routes';
 import {
+  AirlineSeatReclineNormalOutlined,
   DirectionsCarOutlined,
   LiveTv,
   MemoryOutlined,
   PeopleAltOutlined,
-  Speed,
 } from '@mui/icons-material';
 
 export type NavConfigItem = {
@@ -19,11 +19,11 @@ export type NavConfigItem = {
 };
 
 export const navConfig: NavConfigItem[] = [
-  {
-    title: 'dashboard',
-    path: '/dashboard',
-    icon: <Speed />,
-  },
+  // {
+  //   title: 'dashboard',
+  //   path: '/dashboard',
+  //   icon: <Speed />,
+  // },
   {
     title: 'Live Preview',
     path: '/dashboard/live',
@@ -45,9 +45,9 @@ export const navConfig: NavConfigItem[] = [
     ],
   },
   {
-    title: 'Devices',
-    path: '/dashboard/devices',
-    icon: <MemoryOutlined />,
+    title: 'Drivers',
+    path: '/dashboard/drivers',
+    icon: <AirlineSeatReclineNormalOutlined />,
     children: [
       {
         title: 'List',
@@ -63,6 +63,21 @@ export const navConfig: NavConfigItem[] = [
     title: 'Vehicles',
     path: '/dashboard/vehicles',
     icon: <DirectionsCarOutlined />,
+    children: [
+      {
+        title: 'List',
+        path: '/list',
+      },
+      {
+        title: 'Add',
+        path: '/new',
+      },
+    ],
+  },
+  {
+    title: 'Devices',
+    path: '/dashboard/devices',
+    icon: <MemoryOutlined />,
     children: [
       {
         title: 'List',

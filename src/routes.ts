@@ -1,3 +1,4 @@
+import { isNil } from '$modules/checks';
 import type { LinkProps } from 'next/link';
 import type { UrlObject } from 'url';
 
@@ -12,7 +13,7 @@ export type PathnameUrlObject = Omit<ResolvedUrlObject, 'pathname'> &
 
 export type PathnameUrlObjectFunction = (
   rest?: Omit<ResolvedUrlObject, 'pathname'>
-) => PathnameUrlObject;
+) => PathnameUrlObject & { link: string };
 
 export interface AnyRoutesMap {
   [k: string]: PathnameUrlObjectFunction & AnyRoutesMap;
@@ -34,6 +35,17 @@ export type AppRoutesMap = {
       list: PathnameUrlObjectFunction;
       new: PathnameUrlObjectFunction;
     };
+    drivers: {
+      '[id]': {
+        edit: PathnameUrlObjectFunction;
+        view: PathnameUrlObjectFunction;
+      };
+      list: PathnameUrlObjectFunction;
+      new: PathnameUrlObjectFunction;
+    };
+    live: {
+      index: PathnameUrlObjectFunction;
+    };
     users: {
       '[id]': {
         edit: PathnameUrlObjectFunction;
@@ -53,12 +65,48 @@ export type AppRoutesMap = {
   };
 };
 
+const applyQuery = (pathname: string, query?: PathnameUrlObject['query']) => {
+  if (!query || typeof query !== 'object') return pathname;
+
+  return Object.entries(query).reduce(
+    (acc, [key, value]) =>
+      !isNil(value) ? pathname.replaceAll(`[${key}]`, value.toString()) : pathname,
+    pathname
+  );
+};
+
+const applySearch = (pathname: string, search?: string) => {
+  if (!search) return pathname;
+  if (search.startsWith('?')) return pathname + search;
+  return pathname + '?' + search;
+};
+
+const getLink = ({
+  pathname,
+  query,
+  search,
+}: Pick<PathnameUrlObject, 'pathname' | 'query' | 'search'>) =>
+  applySearch(applyQuery(pathname, query), search);
+
 const api = <TMap = AnyRoutesMap>(path: (string | symbol)[] = []) =>
   new Proxy(
-    (args => ({
-      pathname: '/' + path.join('/'),
-      ...args,
-    })) as PathnameUrlObjectFunction,
+    (args => {
+      const pathname = '/' + path.join('/');
+
+      const link = getLink({
+        pathname,
+        query: args?.query,
+        search: args?.search,
+      });
+
+      const urlObject = {
+        pathname,
+        link,
+        ...args,
+      };
+
+      return urlObject;
+    }) as PathnameUrlObjectFunction,
     {
       get: (_, key): any => (key === 'index' ? api(path) : api([...path, key])),
     }

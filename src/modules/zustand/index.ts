@@ -1,5 +1,6 @@
-import type { StoreApi } from 'zustand';
-import { createStore as create } from 'zustand';
+import type { Mutate, StoreApi } from 'zustand';
+import type { UseBoundStore } from 'zustand/react';
+import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
 import type { Draft } from 'immer';
 import produce from 'immer';
@@ -91,7 +92,7 @@ export const createStore =
   <TState extends AnyObject, TActions extends AnyObject>(
     initialState: TState,
     actions: StateCreator<TState, TActions, (fn: (draft: Draft<TState>) => void) => void>
-  ) => {
+  ): UseBoundStore<Mutate<StoreApi<TState & TActions>, []>> => {
     if (options?.devtools && options?.persist)
       return createStoreFull(options?.name)(initialState, actions);
     if (options?.devtools)

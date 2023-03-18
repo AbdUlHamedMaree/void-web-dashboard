@@ -5,20 +5,21 @@ import { styled } from '@mui/material/styles';
 import { DashboardLayoutNavbar } from './navbar';
 import { DashboardLayoutSidebar } from './sidebar';
 import { Scrollbar } from '$ui/components/shared/scrollbar';
+import { APP_BAR_DESKTOP, APP_BAR_MOBILE } from '$logic/constants';
 
 // ----------------------------------------------------------------------
 
-const APP_BAR_MOBILE = 64;
-const APP_BAR_DESKTOP = 92;
-
 const RootStyle = styled('div')({
+  display: 'flex',
   height: '100%',
+  overflow: 'hidden',
 });
 
 const MainStyle = styled('div')(({ theme }) => ({
-  paddingTop: APP_BAR_MOBILE + 24,
+  height: '100%',
+  paddingTop: APP_BAR_MOBILE,
   [theme.breakpoints.up('lg')]: {
-    paddingTop: APP_BAR_DESKTOP + 24,
+    paddingTop: APP_BAR_DESKTOP,
   },
 }));
 

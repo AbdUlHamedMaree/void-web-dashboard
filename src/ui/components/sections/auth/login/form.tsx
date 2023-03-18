@@ -8,6 +8,10 @@ import {
   TextInput,
 } from '@mrii/react-form-builder';
 import { useRouter } from 'next/router';
+import { mockData } from '$logic/helpers/mock-data';
+import { mockUser } from '$logic/models/user';
+import { storage } from '$logic/libs/storage';
+import '$modules/yup-empty-to-null';
 
 type FieldsType = {
   email: string;
@@ -30,10 +34,21 @@ export const AuthLoginFormSection: React.FC = () => {
     []
   );
 
-  const onSubmit = useCallback((values: FieldsType) => {
-    console.log({ values });
-    push('/dashboard');
-  }, []);
+  const onSubmit = useCallback(
+    (values: FieldsType) => {
+      mockData();
+
+      const user = mockUser({
+        email: values.email,
+      });
+      storage.user.set(user);
+
+      storage.auth.set(true);
+
+      push('/dashboard/live');
+    },
+    [push]
+  );
 
   return (
     <FormBuilder<FieldsType>

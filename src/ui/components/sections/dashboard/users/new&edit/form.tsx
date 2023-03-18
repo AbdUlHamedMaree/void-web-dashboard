@@ -1,29 +1,23 @@
 import React, { useMemo } from 'react';
-import { Box, Card, Container, Grid, Typography } from '@mui/material';
+import { Box, Grid } from '@mui/material';
 import type { DefaultValues } from '@mrii/react-form-builder';
-import {
-  FormBuilder,
-  FormSubmitInput,
-  SelectInput,
-  TextInput,
-} from '@mrii/react-form-builder';
-import type { AppRoleUnion } from '$logic/models/user';
+import { FormBuilder } from '@mrii/react-form-builder';
+import { FormSubmitInput, SelectInput, TextInput } from '@mrii/react-form-builder';
+import type { AppRoleUnion, UserModel } from '$logic/models/user';
 import { AppRoleToReadable } from '$logic/models/user';
 import { AppRoleEnum } from '$logic/models/user';
+import type { SchemaOf } from 'yup';
 import { object, string } from 'yup';
 import type { SubmitHandler } from 'react-hook-form';
+import '$modules/yup-empty-to-null';
+import { NewEditPage } from '$ui/components/dumb/new&edit-page';
 
-type FormFields = {
-  name: string;
-  email: string;
-  role: AppRoleUnion;
-  phoneNumber: string;
-};
+type FormFields = Omit<UserModel, 'id'>;
 
-const schema = object({
+const schema: SchemaOf<FormFields> = object({
   name: string().trim().required(),
   email: string().trim().email().required(),
-  role: string().trim().required().oneOf(Object.values(AppRoleEnum)),
+  role: string().oneOf(Object.values<AppRoleUnion>(AppRoleEnum)).required(),
   phoneNumber: string().trim().required(),
 });
 
@@ -56,38 +50,33 @@ export const DashboardUsersNewEditForm: React.FC<DashboardUsersNewEditFormProps>
   );
 
   return (
-    <Container maxWidth='lg'>
-      <Typography variant='h4'>
-        {isNew ? 'New User' : `Edit User "${defaultValues?.name}"`}
-      </Typography>
-      <Card sx={{ mt: 3, p: 2 }}>
-        <FormBuilder<FormFields>
-          validation={schema}
-          onSubmit={onSubmit}
-          defaultValues={defaultValues}
-        >
-          <Grid container rowSpacing={3} columnSpacing={2}>
-            <Grid md={6} xs={12} item>
-              <TextInput name='name' fullWidth />
-            </Grid>
-            <Grid md={6} xs={12} item>
-              <TextInput name='email' fullWidth />
-            </Grid>
-            <Grid md={6} xs={12} item>
-              <SelectInput name='role' items={AppRoleToReadable} fullWidth />
-            </Grid>
-            <Grid md={6} xs={12} item>
-              <TextInput name='phoneNumber' fullWidth />
-            </Grid>
+    <NewEditPage resourceTitle='User' itemDisplayName={defaultValues.name} mode={mode}>
+      <FormBuilder<FormFields>
+        validation={schema}
+        onSubmit={onSubmit}
+        defaultValues={defaultValues}
+      >
+        <Grid container rowSpacing={3} columnSpacing={2}>
+          <Grid md={6} xs={12} item>
+            <TextInput name='name' fullWidth />
           </Grid>
+          <Grid md={6} xs={12} item>
+            <TextInput name='email' fullWidth />
+          </Grid>
+          <Grid md={6} xs={12} item>
+            <SelectInput name='role' items={AppRoleToReadable} fullWidth />
+          </Grid>
+          <Grid md={6} xs={12} item>
+            <TextInput name='phoneNumber' fullWidth />
+          </Grid>
+        </Grid>
 
-          <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 3 }}>
-            <FormSubmitInput size='large' variant='contained'>
-              {isNew ? 'Create User' : 'Save Changes'}
-            </FormSubmitInput>
-          </Box>
-        </FormBuilder>
-      </Card>
-    </Container>
+        <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 3 }}>
+          <FormSubmitInput size='large' variant='contained'>
+            {isNew ? 'Create User' : 'Save Changes'}
+          </FormSubmitInput>
+        </Box>
+      </FormBuilder>
+    </NewEditPage>
   );
 };

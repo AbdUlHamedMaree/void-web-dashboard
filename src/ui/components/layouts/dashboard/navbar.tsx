@@ -6,15 +6,12 @@ import { Box, Stack, AppBar, Toolbar, IconButton } from '@mui/material';
 import { DashboardLayoutSearchbar } from './searchbar';
 import { DashboardLayoutAccountPopover } from './account-popover';
 import { Menu } from '@mui/icons-material';
+import { APP_BAR_DESKTOP, APP_BAR_MOBILE, DRAWER_WIDTH } from '$logic/constants';
 
 // ----------------------------------------------------------------------
 
-const DRAWER_WIDTH = 280;
-const APPBAR_MOBILE = 64;
-const APPBAR_DESKTOP = 92;
-
 const RootStyle = styled(AppBar)(({ theme }) => ({
-  boxShadow: 'none',
+  boxShadow: theme.shadows[4],
   backdropFilter: 'blur(6px)',
   WebkitBackdropFilter: 'blur(6px)', // Fix on Mobile
   backgroundColor: alpha(theme.palette.background.default, 0.72),
@@ -24,9 +21,9 @@ const RootStyle = styled(AppBar)(({ theme }) => ({
 }));
 
 const ToolbarStyle = styled(Toolbar)(({ theme }) => ({
-  minHeight: APPBAR_MOBILE,
+  minHeight: APP_BAR_MOBILE,
   [theme.breakpoints.up('lg')]: {
-    minHeight: APPBAR_DESKTOP,
+    minHeight: APP_BAR_DESKTOP,
     padding: theme.spacing(0, 5),
   },
 }));

@@ -9,13 +9,13 @@ import { DefaultSeo } from 'next-seo';
 import type { AppProps as BaseAppProps } from 'next/app';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
-import { useRouter } from 'next/router';
-import React, { useEffect, useMemo } from 'react';
-import { isServer } from '$libs/checks';
+import React, { useEffect, useMemo, useState } from 'react';
+import { isServer } from '$logic/libs/checks';
 import { scrollToWindowHash } from '$logic/utils/scroll-to-window-hash';
 import 'nprogress/nprogress.css';
 import { AuthGuard } from '$ui/components/guards/auth';
 import type { NextPage } from 'next';
+import { Hydrate, QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 const url = process.env.NEXT_PUBLIC_SITE_URL!;
 
@@ -67,9 +67,10 @@ type AppProps = {
 const App: React.FC<AppProps> = ({
   Component,
   pageProps,
+  router,
   emotionCache = clientSideEmotionCache,
 }) => {
-  const { asPath } = useRouter();
+  const [queryClient] = useState(() => new QueryClient());
 
   const Layout: React.ComponentType<{ children?: React.ReactNode }> = useMemo(
     () =>
@@ -82,7 +83,7 @@ const App: React.FC<AppProps> = ({
     if (isServer()) return;
     // To scroll to section by url hashing (ex: /home#blog)
     scrollToWindowHash();
-  }, [asPath]);
+  }, [router.asPath]);
 
   const page = useMemo(() => {
     if (Component?.auth)
@@ -104,7 +105,12 @@ const App: React.FC<AppProps> = ({
         </Head>
         <ThemeProvider theme={theme}>
           <CssBaseline />
-          <Layout>{page}</Layout>
+
+          <QueryClientProvider client={queryClient}>
+            <Hydrate state={pageProps.dehydratedState}>
+              <Layout>{page}</Layout>
+            </Hydrate>
+          </QueryClientProvider>
         </ThemeProvider>
       </CacheProvider>
     </>

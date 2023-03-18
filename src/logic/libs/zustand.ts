@@ -1,7 +1,7 @@
 import { immer } from 'zustand/middleware/immer';
 import { subscribeWithSelector } from 'zustand/middleware';
 import type { StateCreator } from 'zustand';
-import { createStore as create } from 'zustand';
+import { create } from 'zustand';
 
 export const createStore = <TState extends object, TActions extends object>(
   initialState: TState,

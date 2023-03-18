@@ -1,14 +1,6 @@
-import React from 'react';
-import type { NextPage } from 'next';
-import { SplashScreen } from '$ui/components/shared/splash-screen';
 import { redirectServerProps } from '$logic/helpers/redirect-server-props';
+import { SplashPage } from '$ui/components/shared/splash-page';
 
-type PageProps = {};
-
-const Page: NextPage<PageProps> = () => {
-  return <SplashScreen />;
-};
-
-export default Page;
+export default SplashPage;
 
 export const getServerSideProps = redirectServerProps('view');

@@ -2,17 +2,16 @@ import { useEffect, useMemo } from 'react';
 import { styled } from '@mui/material/styles';
 import { Box, Drawer, Typography, Avatar } from '@mui/material';
 import { navConfig } from './nav-config';
-import { useResponsive } from '$logic/hooks/use-responsive';
 import { Scrollbar } from '$ui/components/shared/scrollbar';
 import { useRouter } from 'next/router';
 import { NavSection } from '$ui/components/shared/nav-section';
 import { Logo } from '$ui/components/shared/logo';
 import { Link } from '$ui/components/shared/link';
 import { routes } from '$routes';
+import { DRAWER_WIDTH } from '$logic/constants';
+import { useIsDesktop } from '$logic/hooks/use-is-desktop';
 
 // ----------------------------------------------------------------------
-
-const DRAWER_WIDTH = 280;
 
 const RootStyle = styled('div')(({ theme }) => ({
   [theme.breakpoints.up('lg')]: {
@@ -41,7 +40,7 @@ export const DashboardLayoutSidebar: React.FC<DashboardLayoutSidebarProps> = ({
 }) => {
   const { pathname } = useRouter();
 
-  const isDesktop = useResponsive('up', 'lg');
+  const isDesktop = useIsDesktop();
 
   useEffect(() => {
     if (isOpenSidebar) {
@@ -59,7 +58,7 @@ export const DashboardLayoutSidebar: React.FC<DashboardLayoutSidebarProps> = ({
             href={routes.dashboard.index()}
             sx={{ color: 'text.primary' }}
           >
-            <Logo textAlign='center' fontSize={88} />
+            <Logo textAlign='center' fontSize={64} />
           </Link>
         </Box>
 

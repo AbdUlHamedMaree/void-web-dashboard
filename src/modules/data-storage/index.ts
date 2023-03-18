@@ -1,14 +1,14 @@
 export const dataStorage = <T>(key: string) => ({
   set: (data: T) =>
     void (
-      typeof window !== 'undefined' &&
-      window.localStorage.setItem(key, JSON.stringify(data))
+      typeof localStorage !== 'undefined' &&
+      localStorage.setItem(key, JSON.stringify(data))
     ),
-  get: () => {
-    if (typeof window === 'undefined') return undefined;
-    const json = window.localStorage.getItem(key);
-    return json ? (JSON.parse(json) as T) : undefined;
+  get: (defaultValue?: T | undefined) => {
+    if (typeof localStorage === 'undefined') return undefined;
+    const json = localStorage.getItem(key);
+    return json ? (JSON.parse(json) as T) : defaultValue;
   },
   remove: () =>
-    void (typeof window !== 'undefined' && window.localStorage.removeItem(key)),
+    void (typeof localStorage !== 'undefined' && localStorage.removeItem(key)),
 });

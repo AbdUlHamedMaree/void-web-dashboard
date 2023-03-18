@@ -1,0 +1,25 @@
+{
+  "schema": "http://44.202.17.186:3000/graphql/",
+  "documents": [
+    "./src/**/*.tsx",
+    "!./src/logic/gql/**"
+  ],
+  "extensions": {
+    "codegen": {
+      "generates": {
+        "./src/logic/gql/": {
+          "preset": "client"
+        }
+      },
+      "hooks": {
+        "afterAllFileWrite": [
+          "eslint --fix"
+        ]
+      },
+      "watchConfig": {
+        "usePolling": true,
+        "interval": 1000
+      }
+    }
+  }
+}

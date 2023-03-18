@@ -25,6 +25,7 @@ addMethod(string, 'emptyToNull', function emptyToNull() {
     isString(ov) && ov.trim() === '' ? null : v
   );
 });
+
 addMethod(number, 'emptyToNull', function emptyToNull() {
   return this.transform((v: string, ov: string) =>
     isString(ov) && ov.trim() === '' ? null : v

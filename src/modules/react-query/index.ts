@@ -7,8 +7,11 @@ import type {
   UseQueryOptions,
   UseMutationOptions,
   UseMutateAsyncFunction,
-} from 'react-query';
-import { useQuery as useBaseQuery, useMutation as useBaseMutation } from 'react-query';
+} from '@tanstack/react-query';
+import {
+  useQuery as useBaseQuery,
+  useMutation as useBaseMutation,
+} from '@tanstack/react-query';
 
 export type AxiosRequestConfigWithTypes<
   TData = any,

@@ -4,15 +4,23 @@ import { Scrollbars } from 'react-custom-scrollbars-2';
 
 const StyledScrollbars = styled(Scrollbars)``;
 
-export type ScrollbarProps = React.ComponentProps<typeof StyledScrollbars>;
+export type ScrollbarProps = {
+  useFlex?: boolean;
+} & React.ComponentProps<typeof StyledScrollbars>;
 
 export const Scrollbar = memo(
   forwardRef<Scrollbars, React.PropsWithChildren<ScrollbarProps>>(function Scrollbar(
-    { children, ...props },
+    { children, useFlex, ...props },
     ref
   ) {
+    const style = useFlex ? { height: 'auto', flex: 1 } : {};
     return (
-      <StyledScrollbars universal {...props} ref={ref}>
+      <StyledScrollbars
+        universal
+        {...props}
+        style={{ ...style, ...props.style }}
+        ref={ref}
+      >
         {children}
       </StyledScrollbars>
     );

@@ -1,10 +1,11 @@
 import React from 'react';
-import { Box, Button, Card, Container, Typography } from '@mui/material';
+import { Box, Button, Card, Typography } from '@mui/material';
 import { Add } from '@mui/icons-material';
 import { NextLinkComposed } from '$ui/components/shared/link';
 import type { NextUrl } from '$routes';
 import type { TableBuilderProps } from '@mrii/react-table-builder';
 import { TableBuilder } from '@mrii/react-table-builder';
+import { DefaultContainer } from './default-container';
 
 export type ListPageProps = {
   resourceTitle?: React.ReactNode;
@@ -18,7 +19,7 @@ export const ListPage: React.FC<React.PropsWithChildren<ListPageProps>> = ({
   ...props
 }) => {
   return (
-    <Container maxWidth='lg'>
+    <DefaultContainer maxWidth='lg'>
       <Box
         sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
       >
@@ -34,9 +35,10 @@ export const ListPage: React.FC<React.PropsWithChildren<ListPageProps>> = ({
       </Box>
       <Card sx={{ mt: 4 }}>
         <TableBuilder
+          disableSelectionOnClick
           disableVirtualization
           {...props}
-          sx={{ height: 'calc(100vh - 250px)', minHeight: 400, ...props.sx }}
+          sx={{ height: 'calc(100vh - 210px)', minHeight: 400, ...props.sx }}
           initialState={{
             ...props.initialState,
             columns: {
@@ -52,6 +54,6 @@ export const ListPage: React.FC<React.PropsWithChildren<ListPageProps>> = ({
           {children}
         </TableBuilder>
       </Card>
-    </Container>
+    </DefaultContainer>
   );
 };

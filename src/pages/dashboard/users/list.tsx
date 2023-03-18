@@ -1,17 +1,42 @@
-import React, { useMemo } from 'react';
+import React, { useCallback } from 'react';
 import type { NextPage } from 'next';
 import { DashboardLayout } from '$ui/components/layouts/dashboard';
 import { routes } from '$routes';
 import { TextColumn } from '@mrii/react-table-builder';
-import { mockUser } from '$logic/models/user';
-import { array, number } from '@scandinavia/mock';
+import type { AppActionsColumnClickHandler } from '$ui/components/dumb/action-column';
 import { AppActionsColumn } from '$ui/components/dumb/action-column';
 import { ListPage } from '$ui/components/dumb/list-page';
+import { useRouter } from 'next/router';
+import { useUsers, useUsersStore } from '$logic/state/users';
 
 type PageProps = {};
 
 const Page: NextPage<PageProps> = () => {
-  const users = useMemo(() => array(mockUser, number(10, 40)), []);
+  const { push } = useRouter();
+
+  const users = useUsers();
+  const deleteUser = useUsersStore(useCallback(s => s.deleteUser, []));
+
+  const showHandler = useCallback<AppActionsColumnClickHandler>(
+    ({ id }) =>
+      () =>
+        push(routes.dashboard.users['[id]'].view({ query: { id } })),
+    [push]
+  );
+
+  const editHandler = useCallback<AppActionsColumnClickHandler>(
+    ({ id }) =>
+      () =>
+        push(routes.dashboard.users['[id]'].edit({ query: { id } })),
+    [push]
+  );
+
+  const deleteHandler = useCallback<AppActionsColumnClickHandler>(
+    ({ id }) =>
+      () =>
+        deleteUser(id),
+    [deleteUser]
+  );
 
   return (
     <ListPage
@@ -24,7 +49,11 @@ const Page: NextPage<PageProps> = () => {
       <TextColumn field='email' />
       <TextColumn field='role' />
       <TextColumn field='phoneNumber' />
-      <AppActionsColumn />
+      <AppActionsColumn
+        onShow={showHandler}
+        onEdit={editHandler}
+        onDelete={deleteHandler}
+      />
     </ListPage>
   );
 };
