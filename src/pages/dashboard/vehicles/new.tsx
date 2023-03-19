@@ -19,8 +19,6 @@ const Page: NextPage<PageProps> = () => {
   const getPureUser = useGetPureUser();
   const getPureDevice = useGetPureDevice();
 
-  (window as any).push = push;
-
   const handleSubmit = useCallback<
     Exclude<DashboardVehiclesNewEditFormProps['onSubmit'], undefined>
   >(
