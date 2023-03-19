@@ -71,7 +71,7 @@ export const GoogleMaps = forwardRef<GoogleMap, GoogleMapsProps>(function Google
     <GoogleMap
       mapContainerStyle={containerStyle}
       center={center}
-      zoom={10}
+      zoom={13}
       {...props}
       ref={ref}
     >

@@ -8,7 +8,7 @@ import { isIOS } from '$logic/utils/is-ios';
 import { useVehicles } from '$logic/state/vehicles';
 import { GoogleMaps } from '$ui/components/dumb/google-maps';
 import { CarMarker } from '$ui/components/dumb/car-marker';
-import { useVehicleService } from '$logic/_mock/use-vehicle-service';
+import { useVehiclesService } from '$logic/_mock/use-vehicles-service';
 import { VehicleSidebarCard } from '$ui/components/sections/dashboard/live';
 import { routes } from '$routes';
 
@@ -44,7 +44,7 @@ const MapContainer = styled('div')(({}) => ({
 type PageProps = {};
 
 const Page: NextPage<PageProps> = () => {
-  useVehicleService();
+  useVehiclesService();
 
   const vehicles = useVehicles();
   const isDesktop = useIsDesktop();
@@ -139,7 +139,7 @@ const Page: NextPage<PageProps> = () => {
         .map(vehicle =>
           vehicle.location && vehicle.rotation ? (
             <CarMarker
-              key={`${vehicle.id}:${vehicle.rotation}`}
+              key={vehicle.id}
               position={{ lat: vehicle.location[0], lng: vehicle.location[1] }}
               rotation={vehicle.rotation}
             />
