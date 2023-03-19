@@ -61,6 +61,8 @@ export const GoogleMaps = forwardRef<GoogleMap, GoogleMapsProps>(function Google
       <Alert severity='error'>
         <AlertTitle>Error</AlertTitle>
         Failed to load the google maps - <strong>please contact the support</strong>
+        <br />
+        Error Message:<code>{`[${loadError.name}] ${loadError.message}`}</code>
       </Alert>
     );
 

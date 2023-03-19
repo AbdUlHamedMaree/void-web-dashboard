@@ -33,8 +33,6 @@ const VehiclesDrawer = styled('div')(({ theme }) => ({
   flexShrink: 0,
   width: 340,
   background: theme.palette.background.default,
-  marginRight: theme.spacing(1),
-  borderRight: '1px dashed ' + theme.palette.divider,
 }));
 
 const MapContainer = styled('div')(({}) => ({

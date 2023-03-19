@@ -20,18 +20,8 @@ import { CarMarker } from '$ui/components/dumb/car-marker';
 import { useVehicleService } from '$logic/_mock/use-vehicle-service';
 import { ExpandMore } from '@mui/icons-material';
 import { VehicleStatusEnum } from '$logic/models/vehicle';
-
-type KeyValueProps = {
-  label?: React.ReactNode;
-  value?: React.ReactNode;
-};
-
-const KeyValue: React.FC<KeyValueProps> = ({ label, value }) => (
-  <>
-    <Typography variant='overline'>{label}</Typography>
-    <Typography ml={1}>{value}</Typography>
-  </>
-);
+import { Link } from '$ui/components/shared/link';
+import { routes } from '$routes';
 
 const drawerBleeding = 24;
 
@@ -54,8 +44,6 @@ const VehiclesDrawer = styled('div')(({ theme }) => ({
   flexShrink: 0,
   width: 340,
   background: theme.palette.background.default,
-  marginRight: theme.spacing(1),
-  borderRight: '1px dashed ' + theme.palette.divider,
 }));
 
 const MapContainer = styled('div')(({}) => ({
@@ -95,54 +83,73 @@ const Page: NextPage<PageProps> = () => {
     const device = vehicle.device;
 
     return (
-      <ShadowScrollbar useFlex autoHide>
-        <Accordion defaultExpanded={true} disableGutters>
-          <AccordionSummary expandIcon={<ExpandMore />}>
-            <Typography fontWeight='medium'>Basic</Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            <KeyValue label='Name' value={vehicle.name} />
-            {/* <KeyValue label='Brand' value={vehicle.brand} />
+      <>
+        <Box p={2}>
+          <Typography variant='h6'>Vehicle Details</Typography>
+        </Box>
+        <ShadowScrollbar useFlex autoHide>
+          <Accordion defaultExpanded={true} disableGutters>
+            <AccordionSummary expandIcon={<ExpandMore />}>
+              <Typography fontWeight='medium'>Basic</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <KeyValue label='Name' value={vehicle.name} />
+              {/* <KeyValue label='Brand' value={vehicle.brand} />
             <KeyValue label='model' value={vehicle.model} />
             <KeyValue
-              label='Manufacturing Year'
-              value={format(new Date(vehicle.manufacturingDate), 'yyyy')}
-            /> */}
-            <KeyValue label='Plate Number' value={vehicle.plateNumber} />
-            <KeyValue label='VIN' value={vehicle.vin} />
-            <KeyValue
-              label='Status'
-              value={vehicle.status ? VehicleStatusEnum[vehicle.status] : 'UNKNOWN'}
-            />
-          </AccordionDetails>
-        </Accordion>
-        <Accordion disabled disableGutters>
-          <AccordionSummary expandIcon={<ExpandMore />}>
-            <Typography fontWeight='medium'>Status</Typography>
-          </AccordionSummary>
-          <AccordionDetails></AccordionDetails>
-        </Accordion>
-        <Accordion defaultExpanded={true} disableGutters>
-          <AccordionSummary expandIcon={<ExpandMore />}>
-            <Typography fontWeight='medium'>Driver</Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            <KeyValue label='Driver Name' value={driver?.name} />
-            <KeyValue label='Driver Email' value={driver?.email} />
-            <KeyValue label='Driver Phone Number' value={driver?.phoneNumber} />
-          </AccordionDetails>
-        </Accordion>
-        <Accordion defaultExpanded={true} disableGutters>
-          <AccordionSummary expandIcon={<ExpandMore />}>
-            <Typography fontWeight='medium'>Device</Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            <KeyValue label='Device Name' value={device?.name} />
-            <KeyValue label='Device Model' value={device?.model} />
-            <KeyValue label='Device IMEI' value={device?.imei} />
-          </AccordionDetails>
-        </Accordion>
-      </ShadowScrollbar>
+            label='Manufacturing Year'
+            value={format(new Date(vehicle.manufacturingDate), 'yyyy')}
+          /> */}
+              <KeyValue label='Plate Number' value={vehicle.plateNumber} />
+              <KeyValue label='VIN' value={vehicle.vin} />
+              <KeyValue
+                label='Status'
+                value={vehicle.status ? VehicleStatusEnum[vehicle.status] : 'UNKNOWN'}
+              />
+            </AccordionDetails>
+          </Accordion>
+          <Accordion disabled disableGutters>
+            <AccordionSummary expandIcon={<ExpandMore />}>
+              <Typography fontWeight='medium'>Status</Typography>
+            </AccordionSummary>
+            <AccordionDetails></AccordionDetails>
+          </Accordion>
+          <Accordion defaultExpanded={true} disableGutters>
+            <AccordionSummary expandIcon={<ExpandMore />}>
+              <Typography fontWeight='medium'>Driver</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <KeyValue
+                label='Driver Name'
+                value={driver?.name}
+                link={
+                  routes.dashboard.drivers['[id]'].view({ query: { id: driver?.id } })
+                    .link
+                }
+              />
+              <KeyValue label='Driver Email' value={driver?.email} />
+              <KeyValue label='Driver Phone Number' value={driver?.phoneNumber} />
+            </AccordionDetails>
+          </Accordion>
+          <Accordion defaultExpanded={true} disableGutters>
+            <AccordionSummary expandIcon={<ExpandMore />}>
+              <Typography fontWeight='medium'>Device</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <KeyValue
+                label='Device Name'
+                value={device?.name}
+                link={
+                  routes.dashboard.devices['[id]'].view({ query: { id: device?.id } })
+                    .link
+                }
+              />
+              <KeyValue label='Device Model' value={device?.model} />
+              <KeyValue label='Device IMEI' value={device?.imei} />
+            </AccordionDetails>
+          </Accordion>
+        </ShadowScrollbar>
+      </>
     );
   }, [vehicle]);
 
@@ -217,3 +224,22 @@ const Page: NextPage<PageProps> = () => {
 Page.layout = DashboardLayout;
 
 export default Page;
+
+type KeyValueProps = {
+  label?: React.ReactNode;
+  value?: React.ReactNode;
+  link?: string;
+};
+
+const KeyValue: React.FC<KeyValueProps> = ({ label, value, link }) => (
+  <Box display='flex' flexDirection='column'>
+    <Typography variant='overline'>{label}</Typography>
+    {link ? (
+      <Link ml={1} href={link}>
+        {value}
+      </Link>
+    ) : (
+      <Typography ml={1}>{value}</Typography>
+    )}
+  </Box>
+);
