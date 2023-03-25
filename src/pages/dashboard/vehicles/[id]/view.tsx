@@ -348,7 +348,7 @@ const KeyValueUnit = memo<KeyValueUnitProps>(function KeyValueUnit({
   link,
 }) {
   return value ? (
-    <Box display='flex' flexDirection='column'>
+    <Box display='flex' flexDirection='column' mb={1}>
       <Typography variant='overline'>{label}</Typography>
       {link ? (
         <Link ml={1} href={link}>
