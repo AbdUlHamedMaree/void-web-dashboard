@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { memo, useCallback, useEffect, useMemo, useState } from 'react';
 import type { NextPage } from 'next';
 import { DashboardLayout } from '$ui/components/layouts/dashboard';
 import { useRouter } from 'next/router';
@@ -22,6 +22,7 @@ import { ExpandMore } from '@mui/icons-material';
 import { VehicleStatusEnum } from '$logic/models/vehicle';
 import { Link } from '$ui/components/shared/link';
 import { routes } from '$routes';
+import { getYesNoValue } from '$logic/utils/get-yes-no-value';
 
 const drawerBleeding = 24;
 
@@ -88,38 +89,146 @@ const Page: NextPage<PageProps> = () => {
           <Typography variant='h6'>Vehicle Details</Typography>
         </Box>
         <ShadowScrollbar useFlex autoHide>
-          <Accordion defaultExpanded={true} disableGutters>
+          <Accordion defaultExpanded disableGutters>
             <AccordionSummary expandIcon={<ExpandMore />}>
               <Typography fontWeight='medium'>Basic</Typography>
             </AccordionSummary>
             <AccordionDetails>
-              <KeyValue label='Name' value={vehicle.name} />
-              {/* <KeyValue label='Brand' value={vehicle.brand} />
-            <KeyValue label='model' value={vehicle.model} />
+              <KeyValueUnit label='Name' value={vehicle.name} />
+              {/* <KeyValueUnit label='Brand' value={vehicle.brand} />
+            <KeyValueUnit label='model' value={vehicle.model} />
             <KeyValue
             label='Manufacturing Year'
             value={format(new Date(vehicle.manufacturingDate), 'yyyy')}
           /> */}
-              <KeyValue label='Plate Number' value={vehicle.plateNumber} />
-              <KeyValue label='VIN' value={vehicle.vin} />
-              <KeyValue
+              <KeyValueUnit label='Plate Number' value={vehicle.plateNumber} />
+              <KeyValueUnit label='VIN' value={vehicle.vin} />
+              <KeyValueUnit
                 label='Status'
                 value={vehicle.status ? VehicleStatusEnum[vehicle.status] : 'UNKNOWN'}
               />
             </AccordionDetails>
           </Accordion>
-          <Accordion disabled disableGutters>
+          <Accordion defaultExpanded disableGutters>
             <AccordionSummary expandIcon={<ExpandMore />}>
               <Typography fontWeight='medium'>Status</Typography>
             </AccordionSummary>
-            <AccordionDetails></AccordionDetails>
+            <AccordionDetails>
+              <KeyValueUnit label='Speed' value={vehicle.meta.speed} unit='km/h' />
+              <KeyValueUnit
+                label='Front Left Door'
+                value={getYesNoValue(vehicle.meta.frontLeftDoorOpen, 'Opened', 'Closed')}
+              />
+              <KeyValueUnit
+                label='Front Right Door'
+                value={getYesNoValue(vehicle.meta.frontRightDoorOpen, 'Opened', 'Closed')}
+              />
+              <KeyValueUnit
+                label='Rear Left Door'
+                value={getYesNoValue(vehicle.meta.rearLeftDoorOpen, 'Opened', 'Closed')}
+              />
+              <KeyValueUnit
+                label='Rear Right Door'
+                value={getYesNoValue(vehicle.meta.rearLeftDoorOpen, 'Opened', 'Closed')}
+              />
+              <KeyValueUnit
+                label='Trunk Door'
+                value={getYesNoValue(vehicle.meta.trunkDoorOpen, 'Opened', 'Closed')}
+              />
+              <KeyValueUnit
+                label='Engine Cover'
+                value={getYesNoValue(vehicle.meta.engineCoverOpen, 'Opened', 'Closed')}
+              />
+              <KeyValueUnit
+                label='Roof'
+                value={getYesNoValue(vehicle.meta.roofOpen, 'Opened', 'Closed')}
+              />
+              <KeyValueUnit
+                label='Load Weight'
+                value={vehicle.meta.loadWeight}
+                unit='kg'
+              />
+              <KeyValueUnit
+                label='Engine Load'
+                value={vehicle.meta.engineLoad}
+                unit='%'
+              />
+              <KeyValueUnit
+                label='Engine RPM'
+                value={vehicle.meta.engineRPM}
+                unit='rpm'
+              />
+              <KeyValueUnit
+                label='Engine Temperature'
+                value={vehicle.meta.engineTemperature}
+              />
+              <KeyValueUnit
+                label='Engine Oil Temperature'
+                value={vehicle.meta.engineOilTemperature}
+                unit={<>&#8451;</>}
+              />
+              <KeyValueUnit
+                label='Engine Oil Level'
+                value={vehicle.meta.engineOilLevel}
+              />
+              <KeyValueUnit
+                label='Engine Work Time'
+                value={vehicle.meta.engineWorkTime}
+                unit='min'
+              />
+              <KeyValueUnit
+                label='Battery Voltage'
+                value={vehicle.meta.batteryVoltage}
+                unit='V'
+              />
+              <KeyValueUnit
+                label='Battery Current'
+                value={vehicle.meta.batteryCurrent}
+                unit='A'
+              />
+              <KeyValueUnit
+                label='Battery Level'
+                value={vehicle.meta.batteryLevel}
+                unit='%'
+              />
+              <KeyValueUnit
+                label='Battery Charging'
+                value={getYesNoValue(vehicle.meta.batteryChargeState, 'ON', 'OFF')}
+              />
+              <KeyValueUnit
+                label='Battery Temperature'
+                value={vehicle.meta.batteryTemperature}
+                unit={<>&#8451;</>}
+              />
+              <KeyValueUnit
+                label='Total Odometer'
+                value={vehicle.meta.totalOdometer}
+                unit='m'
+              />
+              <KeyValueUnit
+                label='Trip Odometer'
+                value={vehicle.meta.tripOdometer}
+                unit='m'
+              />
+              <KeyValueUnit label='Fuel Level' value={vehicle.meta.fuelLevel} unit='%' />
+              <KeyValueUnit
+                label='Fuel Used Gps'
+                value={vehicle.meta.fuelUsedGps}
+                unit='l'
+              />
+              <KeyValueUnit
+                label='Fuel Rate Gps'
+                value={vehicle.meta.fuelRateGps}
+                unit='l/100km'
+              />
+            </AccordionDetails>
           </Accordion>
-          <Accordion defaultExpanded={true} disableGutters>
+          <Accordion defaultExpanded disableGutters>
             <AccordionSummary expandIcon={<ExpandMore />}>
               <Typography fontWeight='medium'>Driver</Typography>
             </AccordionSummary>
             <AccordionDetails>
-              <KeyValue
+              <KeyValueUnit
                 label='Driver Name'
                 value={driver?.name}
                 link={
@@ -127,16 +236,16 @@ const Page: NextPage<PageProps> = () => {
                     .link
                 }
               />
-              <KeyValue label='Driver Email' value={driver?.email} />
-              <KeyValue label='Driver Phone Number' value={driver?.phoneNumber} />
+              <KeyValueUnit label='Driver Email' value={driver?.email} />
+              <KeyValueUnit label='Driver Phone Number' value={driver?.phoneNumber} />
             </AccordionDetails>
           </Accordion>
-          <Accordion defaultExpanded={true} disableGutters>
+          <Accordion defaultExpanded disableGutters>
             <AccordionSummary expandIcon={<ExpandMore />}>
               <Typography fontWeight='medium'>Device</Typography>
             </AccordionSummary>
             <AccordionDetails>
-              <KeyValue
+              <KeyValueUnit
                 label='Device Name'
                 value={device?.name}
                 link={
@@ -144,8 +253,8 @@ const Page: NextPage<PageProps> = () => {
                     .link
                 }
               />
-              <KeyValue label='Device Model' value={device?.model} />
-              <KeyValue label='Device IMEI' value={device?.imei} />
+              <KeyValueUnit label='Device Model' value={device?.model} />
+              <KeyValueUnit label='Device IMEI' value={device?.imei} />
             </AccordionDetails>
           </Accordion>
         </ShadowScrollbar>
@@ -225,21 +334,31 @@ Page.layout = DashboardLayout;
 
 export default Page;
 
-type KeyValueProps = {
+type KeyValueUnitProps = {
   label?: React.ReactNode;
   value?: React.ReactNode;
+  unit?: React.ReactNode;
   link?: string;
 };
 
-const KeyValue: React.FC<KeyValueProps> = ({ label, value, link }) => (
-  <Box display='flex' flexDirection='column'>
-    <Typography variant='overline'>{label}</Typography>
-    {link ? (
-      <Link ml={1} href={link}>
-        {value}
-      </Link>
-    ) : (
-      <Typography ml={1}>{value}</Typography>
-    )}
-  </Box>
-);
+const KeyValueUnit = memo<KeyValueUnitProps>(function KeyValueUnit({
+  label,
+  value,
+  unit,
+  link,
+}) {
+  return value ? (
+    <Box display='flex' flexDirection='column'>
+      <Typography variant='overline'>{label}</Typography>
+      {link ? (
+        <Link ml={1} href={link}>
+          {value} {unit}
+        </Link>
+      ) : (
+        <Typography ml={1}>
+          {value} {unit}
+        </Typography>
+      )}
+    </Box>
+  ) : null;
+});
