@@ -78,11 +78,21 @@ export type VehicleModel = PureVehicleModel & {
 export const mockPureVehicle = (
   vehicle?: Partial<PureVehicleModel>
 ): PureVehicleModel => {
-  const brand = m.pick(...carsBrands);
-  const manufacturingDate = m.date();
+  const brand = vehicle?.brand ?? m.pick(...carsBrands);
+  const manufacturingDate = vehicle?.manufacturingDate
+    ? new Date(vehicle?.manufacturingDate)
+    : m.date();
   const manufacturingYear = manufacturingDate.getFullYear();
-  const model = m.word();
-  const name = `${brand} ${model} ${manufacturingYear}`;
+  const model = vehicle?.model ?? m.word();
+  const name = vehicle?.name ?? `${brand} ${model} ${manufacturingYear}`;
+
+  const status =
+    vehicle?.status ??
+    m.pick(...(Object.keys(VehicleStatusEnum) as VehicleStatusUnion[]));
+
+  const stopped = status === 'stopped';
+  const idle = status === 'idle';
+  const notMoving = stopped || idle;
 
   return {
     id: m.unique(5),
@@ -92,7 +102,7 @@ export const mockPureVehicle = (
     model,
     brand,
     manufacturingDate: manufacturingDate.toISOString(),
-    status: m.pick(...(Object.keys(VehicleStatusEnum) as VehicleStatusUnion[])),
+    status,
     location: [
       m.number(25.094776, 24.514766, true),
       m.number(55.468773, 55.635536, true),
@@ -100,7 +110,7 @@ export const mockPureVehicle = (
     rotation: m.number(0, 360),
     ...vehicle,
     meta: {
-      speed: m.number(0, 350),
+      speed: notMoving ? 0 : m.number(0, 350),
 
       frontLeftDoorOpen: m.pick(0, 1),
       frontRightDoorOpen: m.pick(0, 1),
@@ -112,8 +122,8 @@ export const mockPureVehicle = (
 
       loadWeight: m.number(0, 16772215),
 
-      engineLoad: m.number(0, 100),
-      engineRPM: m.number(0, 16384),
+      engineLoad: notMoving ? 0 : m.number(0, 100),
+      engineRPM: notMoving ? 0 : m.number(0, 16384),
       engineTemperature: m.number(-600, 1270),
       engineOilTemperature: m.number(0, 215),
       engineOilLevel: m.number(0, 1, true),

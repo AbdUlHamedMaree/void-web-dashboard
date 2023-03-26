@@ -9,6 +9,7 @@ import { unique } from '@mrii/mock';
 import { useGetPureUser } from '$logic/state/users';
 import { useGetPureDevice } from '$logic/state/devices';
 import { useRouter } from 'next/router';
+import { mockVehicle } from '$logic/models/vehicle';
 
 type PageProps = {};
 
@@ -29,6 +30,7 @@ const Page: NextPage<PageProps> = () => {
         manufacturingDate: values.manufacturingDate.toISOString(),
         driver: getPureUser(values.driver),
         device: getPureDevice(values.device),
+        meta: mockVehicle({ status: 'stopped' }).meta,
       });
       push('.');
     },

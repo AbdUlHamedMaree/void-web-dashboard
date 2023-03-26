@@ -7,6 +7,7 @@ import { ViewPage } from '$ui/components/dumb/view-page';
 import { KeyValueDetails } from '$ui/components/dumb/key-value-details';
 import { Grid } from '@mui/material';
 import { NotFoundPage } from '$ui/components/dumb/not-found-page';
+import { routes } from '$routes';
 
 type PageProps = {};
 
@@ -31,10 +32,26 @@ const Page: NextPage<PageProps> = () => {
           <KeyValueDetails label='Phone Number' value={driver?.phoneNumber} />
         </Grid>
         <Grid item md={6} xs={12}>
-          <KeyValueDetails label='Vehicle Name' value={driver?.vehicle?.name ?? '-'} />
+          <KeyValueDetails
+            label='Vehicle Name'
+            value={driver?.vehicle?.name ?? '-'}
+            href={
+              routes.dashboard.vehicles['[id]'].view({
+                query: { id: driver.vehicle?.id },
+              }).link
+            }
+          />
         </Grid>
         <Grid item md={6} xs={12}>
-          <KeyValueDetails label='Device Name' value={driver?.device?.name ?? '-'} />
+          <KeyValueDetails
+            label='Device Name'
+            value={driver?.device?.name ?? '-'}
+            href={
+              routes.dashboard.devices['[id]'].view({
+                query: { id: driver.device?.id },
+              }).link
+            }
+          />
         </Grid>
       </Grid>
     </ViewPage>

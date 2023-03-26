@@ -25,6 +25,7 @@ type FormFields = Omit<
   | 'driver'
   | 'device'
   | '_mock'
+  | 'meta'
 > & {
   manufacturingDate: Date;
   driver?: string;
