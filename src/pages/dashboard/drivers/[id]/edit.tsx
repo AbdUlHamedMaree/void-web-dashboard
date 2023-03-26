@@ -8,11 +8,12 @@ import { useDriver, useDriversStore } from '$logic/state/drivers';
 import { useGetPureVehicle } from '$logic/state/vehicles';
 import { useGetPureDevice } from '$logic/state/devices';
 import { NotFoundPage } from '$ui/components/dumb/not-found-page';
+import { SplashScreen } from '$ui/components/shared/splash-screen';
 
 type PageProps = {};
 
 const Page: NextPage<PageProps> = () => {
-  const { query, push } = useRouter();
+  const { query, isReady, push } = useRouter();
   const id = query.id as string;
 
   const driver = useDriver(id);
@@ -45,6 +46,8 @@ const Page: NextPage<PageProps> = () => {
     },
     [editDriver, getPureDevice, getPureVehicle, id, push]
   );
+
+  if (!isReady) return <SplashScreen />;
 
   if (!driver) return <NotFoundPage item='Driver' />;
 

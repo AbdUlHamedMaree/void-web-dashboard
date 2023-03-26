@@ -119,9 +119,9 @@ export const NavItem: React.FC<NavItemProps> = ({
 
               return (
                 <ListItemStyle
-                  key={title}
-                  component={NextLinkComposed}
-                  to={itemPath}
+                  key={item.title}
+                  LinkComponent={NextLinkComposed}
+                  href={itemPath}
                   sx={{
                     ...(isActiveSub && activeStyle),
                     pl: 2,
@@ -158,15 +158,15 @@ export const NavItem: React.FC<NavItemProps> = ({
 
   return (
     <ListItemStyle
-      component={NextLinkComposed}
-      to={path}
+      LinkComponent={NextLinkComposed}
+      href={getPathname(path)}
       sx={{
         ...(isActive && activeStyle),
       }}
     >
-      <ListItemIconStyle>{icon && icon}</ListItemIconStyle>
+      <ListItemIconStyle>{icon}</ListItemIconStyle>
       <ListItemText disableTypography primary={title} />
-      {info && info}
+      {info}
     </ListItemStyle>
   );
 };

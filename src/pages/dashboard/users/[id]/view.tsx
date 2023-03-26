@@ -7,14 +7,17 @@ import { ViewPage } from '$ui/components/dumb/view-page';
 import { KeyValueDetails } from '$ui/components/dumb/key-value-details';
 import { Grid } from '@mui/material';
 import { NotFoundPage } from '$ui/components/dumb/not-found-page';
+import { SplashScreen } from '$ui/components/shared/splash-screen';
 
 type PageProps = {};
 
 const Page: NextPage<PageProps> = () => {
-  const { query } = useRouter();
+  const { query, isReady } = useRouter();
   const id = query.id;
 
   const user = useUser(id);
+
+  if (!isReady) return <SplashScreen />;
 
   if (!user) return <NotFoundPage item='User' />;
 

@@ -1,11 +1,18 @@
-import { Typography } from '@mui/material';
+import { Box } from '@mui/system';
+import { Logo } from './logo';
 
 export type SplashScreenProps = {};
 
 export const SplashScreen: React.FC<SplashScreenProps> = () => {
   return (
-    <Typography variant='h1' m='auto'>
-      VOID
-    </Typography>
+    <Box
+      position='fixed'
+      display='flex'
+      justifyContent='center'
+      alignItems='center'
+      sx={{ inset: 0, backgroundColor: 'paper.default' }}
+    >
+      <Logo fontSize={[100, 150, 200, 250]} />
+    </Box>
   );
 };

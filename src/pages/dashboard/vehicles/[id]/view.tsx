@@ -28,6 +28,7 @@ import { Divider } from '@mui/material';
 import { Link } from '$ui/components/shared/link';
 import { List } from '@mui/material';
 import { NotFoundPage } from '$ui/components/dumb/not-found-page';
+import { SplashScreen } from '$ui/components/shared/splash-screen';
 
 const drawerBleeding = 24;
 
@@ -59,7 +60,7 @@ const MapContainer = styled('div')(({}) => ({
 type PageProps = {};
 
 const Page: NextPage<PageProps> = () => {
-  const { query } = useRouter();
+  const { query, isReady } = useRouter();
   const id = query.id;
 
   useVehicleService(id as string);
@@ -302,6 +303,8 @@ const Page: NextPage<PageProps> = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );
+
+  if (!isReady) return <SplashScreen />;
 
   if (!vehicle) return <NotFoundPage item='Vehicle' />;
 

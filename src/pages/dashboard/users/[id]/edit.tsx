@@ -6,11 +6,12 @@ import { DashboardUsersNewEditForm } from '$ui/components/sections/dashboard/use
 import { useRouter } from 'next/router';
 import { useUser, useUsersStore } from '$logic/state/users';
 import { NotFoundPage } from '$ui/components/dumb/not-found-page';
+import { SplashScreen } from '$ui/components/shared/splash-screen';
 
 type PageProps = {};
 
 const Page: NextPage<PageProps> = () => {
-  const { query, push } = useRouter();
+  const { query, isReady, push } = useRouter();
   const id = query.id as string;
 
   const user = useUser(id);
@@ -34,6 +35,8 @@ const Page: NextPage<PageProps> = () => {
     },
     [editUser, id, push]
   );
+
+  if (!isReady) return <SplashScreen />;
 
   if (!user) return <NotFoundPage item='User' />;
 

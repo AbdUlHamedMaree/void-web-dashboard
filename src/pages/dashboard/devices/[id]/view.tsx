@@ -8,14 +8,17 @@ import { KeyValueDetails } from '$ui/components/dumb/key-value-details';
 import { Grid } from '@mui/material';
 import { NotFoundPage } from '$ui/components/dumb/not-found-page';
 import { routes } from '$routes';
+import { SplashScreen } from '$ui/components/shared/splash-screen';
 
 type PageProps = {};
 
 const Page: NextPage<PageProps> = () => {
-  const { query } = useRouter();
+  const { query, isReady } = useRouter();
   const id = query.id;
 
   const device = useDevice(id);
+
+  if (!isReady) return <SplashScreen />;
 
   if (!device) return <NotFoundPage item='Device' />;
 
