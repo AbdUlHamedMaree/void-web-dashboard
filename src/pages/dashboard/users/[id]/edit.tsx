@@ -5,6 +5,7 @@ import type { DashboardUsersNewEditFormProps } from '$ui/components/sections/das
 import { DashboardUsersNewEditForm } from '$ui/components/sections/dashboard/users/new&edit';
 import { useRouter } from 'next/router';
 import { useUser, useUsersStore } from '$logic/state/users';
+import { NotFoundPage } from '$ui/components/dumb/not-found-page';
 
 type PageProps = {};
 
@@ -34,7 +35,7 @@ const Page: NextPage<PageProps> = () => {
     [editUser, id, push]
   );
 
-  if (!user) return null;
+  if (!user) return <NotFoundPage item='User' />;
 
   return (
     <DashboardUsersNewEditForm

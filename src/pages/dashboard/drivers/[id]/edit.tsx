@@ -7,6 +7,7 @@ import { useRouter } from 'next/router';
 import { useDriver, useDriversStore } from '$logic/state/drivers';
 import { useGetPureVehicle } from '$logic/state/vehicles';
 import { useGetPureDevice } from '$logic/state/devices';
+import { NotFoundPage } from '$ui/components/dumb/not-found-page';
 
 type PageProps = {};
 
@@ -45,7 +46,7 @@ const Page: NextPage<PageProps> = () => {
     [editDriver, getPureDevice, getPureVehicle, id, push]
   );
 
-  if (!driver) return null;
+  if (!driver) return <NotFoundPage item='Driver' />;
 
   return (
     <DashboardDriversNewEditForm

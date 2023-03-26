@@ -6,6 +6,7 @@ import { useDriver } from '$logic/state/drivers';
 import { ViewPage } from '$ui/components/dumb/view-page';
 import { KeyValueDetails } from '$ui/components/dumb/key-value-details';
 import { Grid } from '@mui/material';
+import { NotFoundPage } from '$ui/components/dumb/not-found-page';
 
 type PageProps = {};
 
@@ -14,6 +15,8 @@ const Page: NextPage<PageProps> = () => {
   const id = query.id;
 
   const driver = useDriver(id);
+
+  if (!driver) return <NotFoundPage item='Driver' />;
 
   return (
     <ViewPage title='Device Details'>

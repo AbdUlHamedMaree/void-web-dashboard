@@ -27,6 +27,7 @@ import { getYesNoValue } from '$logic/utils/get-yes-no-value';
 import { Divider } from '@mui/material';
 import { Link } from '$ui/components/shared/link';
 import { List } from '@mui/material';
+import { NotFoundPage } from '$ui/components/dumb/not-found-page';
 
 const drawerBleeding = 24;
 
@@ -208,7 +209,7 @@ const Page: NextPage<PageProps> = () => {
                 <KeyValueUnitListItem
                   label='Battery Level'
                   value={vehicle.meta.batteryLevel}
-                  unit=' %'
+                  unit='%'
                 />
                 <KeyValueUnitListItem
                   label='Battery Charging'
@@ -232,7 +233,7 @@ const Page: NextPage<PageProps> = () => {
                 <KeyValueUnitListItem
                   label='Fuel Level'
                   value={vehicle.meta.fuelLevel}
-                  unit=' %'
+                  unit='%'
                 />
                 <KeyValueUnitListItem
                   label='Fuel Used Gps'
@@ -302,7 +303,7 @@ const Page: NextPage<PageProps> = () => {
     []
   );
 
-  if (!vehicle) return <>Vehicle not found</>;
+  if (!vehicle) return <NotFoundPage item='Vehicle' />;
 
   return (
     <RootContainer>

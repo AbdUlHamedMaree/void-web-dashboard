@@ -7,6 +7,7 @@ import { DashboardVehiclesNewEditForm } from '$ui/components/sections/dashboard/
 import { useVehicle, useVehiclesStore } from '$logic/state/vehicles';
 import { useGetPureDriver } from '$logic/state/drivers';
 import { useGetPureDevice } from '$logic/state/devices';
+import { NotFoundPage } from '$ui/components/dumb/not-found-page';
 
 type PageProps = {};
 
@@ -49,7 +50,7 @@ const Page: NextPage<PageProps> = () => {
     [editVehicle, getPureDevice, getPureDriver, id, push]
   );
 
-  if (!vehicle) return null;
+  if (!vehicle) return <NotFoundPage item='Vehicle' />;
 
   return (
     <DashboardVehiclesNewEditForm

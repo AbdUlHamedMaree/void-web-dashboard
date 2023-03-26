@@ -18,13 +18,15 @@ export type NextLinkComposedProps = Omit<
     NextLinkProps,
     'href' | 'as' | 'passHref' | 'onMouseEnter' | 'onClick' | 'onTouchStart'
   > & {
-    to: NextLinkProps['href'];
+    href: NextLinkProps['href'];
+    to?: NextLinkProps['href'];
     linkAs?: NextLinkProps['as'];
   };
 
 export const NextLinkComposed = forwardRef<HTMLAnchorElement, NextLinkComposedProps>(
   function NextLinkComposed(
     {
+      href: propsHref,
       to,
       linkAs,
       replace,
@@ -37,9 +39,10 @@ export const NextLinkComposed = forwardRef<HTMLAnchorElement, NextLinkComposedPr
     },
     ref
   ) {
+    const href = to ?? propsHref;
     return (
       <NextLink
-        href={to}
+        href={href}
         prefetch={prefetch}
         as={linkAs}
         replace={replace}
@@ -116,7 +119,13 @@ export const Link = forwardRef<HTMLAnchorElement, LinkProps>(function Link(props
 
   if (noLinkStyle) {
     return (
-      <NextLinkComposed className={className} ref={ref} {...nextjsProps} {...other} />
+      <NextLinkComposed
+        className={className}
+        ref={ref}
+        href={href}
+        {...nextjsProps}
+        {...other}
+      />
     );
   }
 
