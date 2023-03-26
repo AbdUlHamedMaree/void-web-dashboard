@@ -22,6 +22,7 @@ export type VehicleSidebarCardProps = {
   status?: VehicleStatusUnion;
 
   focused?: boolean;
+  selected?: boolean;
   hidden?: boolean;
 
   setFocusVehicle?: (id: string) => void;
@@ -39,6 +40,7 @@ export const VehicleSidebarCard = memo<VehicleSidebarCardProps>(
     deviceHref = '#',
     status,
     focused,
+    selected,
     hidden,
     setFocusVehicle,
     toggleHideVehicle,
@@ -54,7 +56,14 @@ export const VehicleSidebarCard = memo<VehicleSidebarCardProps>(
     );
 
     return (
-      <Card variant='outlined' sx={{ display: 'flex' }}>
+      <Card
+        id={vehicleId}
+        variant='outlined'
+        sx={{
+          display: 'flex',
+          border: t => (selected ? `2px solid ${t.palette.primary.main}` : undefined),
+        }}
+      >
         <CardContent sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
           <Link typography='h6' href={vehicleHref} underline='hover'>
             {vehicleName}

@@ -1,16 +1,21 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { NextPage } from 'next';
 import { DashboardLayout } from '$ui/components/layouts/dashboard';
 import { Box, Stack, styled, SwipeableDrawer, TextField } from '@mui/material';
 import { ShadowScrollbar } from '$ui/components/shared/shadow-scrollbar';
 import { useIsDesktop } from '$logic/hooks/use-is-desktop';
 import { isIOS } from '$logic/utils/is-ios';
-import { useVehicles } from '$logic/state/vehicles';
+import { useVehicle, useVehicles } from '$logic/state/vehicles';
 import { GoogleMaps } from '$ui/components/dumb/google-maps';
 import { CarMarker } from '$ui/components/dumb/car-marker';
 import { useVehiclesService } from '$logic/_mock/use-vehicles-service';
 import { VehicleSidebarCard } from '$ui/components/sections/dashboard/live';
 import { routes } from '$routes';
+import { locationToLayLng } from '$logic/utils/location-to-lat-lng';
+import { VehicleInfoWindow } from '$ui/components/dumb/vehicle-info-window';
+import { isDefined } from '$modules/checks';
+import type Scrollbars from 'react-custom-scrollbars-2';
+import { useMemoizedCallback } from '$logic/hooks/use-memoized-callback';
 
 const drawerBleeding = 24;
 
@@ -47,11 +52,27 @@ const Page: NextPage<PageProps> = () => {
   const vehicles = useVehicles();
   const isDesktop = useIsDesktop();
 
+  const scrollbarRef = useRef<Scrollbars>(null);
+
+  const [selectedVehicleId, setSelectedVehicleId] = useState<string>();
   const [open, setOpen] = useState(false);
   const [filter, setFilter] = useState<string>('');
   const [focusedVehicleId, setFocusedVehicleId] = useState<string>();
   const [hiddenVehiclesIds, setHiddenVehiclesIds] = useState<string[]>([]);
   const [map, setMap] = useState<google.maps.Map>();
+
+  const selectedVehicle = useVehicle(selectedVehicleId);
+
+  const selectVehicle = useMemoizedCallback(
+    (vehicleId: string) => () => {
+      setSelectedVehicleId(vehicleId);
+      const el = document.getElementById(vehicleId);
+      if (el) scrollbarRef.current?.scrollTop(el.offsetTop - 8);
+    },
+    []
+  );
+
+  const unSelectVehicle = useCallback(() => setSelectedVehicleId(undefined), []);
 
   const toggleDrawer = useCallback(
     (newOpen: boolean) => () => {
@@ -107,7 +128,7 @@ const Page: NextPage<PageProps> = () => {
           driverName={vehicle.driver?.name}
           driverHref={
             vehicle.driver
-              ? routes.dashboard.users['[id]'].view({
+              ? routes.dashboard.drivers['[id]'].view({
                   query: { id: vehicle.driver.id },
                 }).link
               : undefined
@@ -115,19 +136,26 @@ const Page: NextPage<PageProps> = () => {
           deviceName={vehicle.device?.name}
           deviceHref={
             vehicle.device
-              ? routes.dashboard.users['[id]'].view({
+              ? routes.dashboard.devices['[id]'].view({
                   query: { id: vehicle.device.id },
                 }).link
               : undefined
           }
           status={vehicle.status}
           focused={vehicle.id === focusedVehicleId}
+          selected={vehicle.id === selectedVehicleId}
           hidden={hiddenVehiclesIds.includes(vehicle.id)}
           setFocusVehicle={setFocusedVehicleId}
           toggleHideVehicle={toggleHideVehicle}
         />
       )),
-    [focusedVehicleId, hiddenVehiclesIds, toggleHideVehicle, filteredVehicles]
+    [
+      filteredVehicles,
+      focusedVehicleId,
+      selectedVehicleId,
+      hiddenVehiclesIds,
+      toggleHideVehicle,
+    ]
   );
 
   const vehiclesMarkers = useMemo(
@@ -140,10 +168,11 @@ const Page: NextPage<PageProps> = () => {
               key={vehicle.id}
               position={{ lat: vehicle.location[0], lng: vehicle.location[1] }}
               rotation={vehicle.rotation}
+              onClick={selectVehicle(vehicle.id)}
             />
           ) : null
         ),
-    [hiddenVehiclesIds, filteredVehicles]
+    [filteredVehicles, hiddenVehiclesIds, selectVehicle]
   );
 
   const focusedVehicle = useMemo(
@@ -172,7 +201,7 @@ const Page: NextPage<PageProps> = () => {
         <Box sx={{ padding: 1 }}>
           <TextField label='Filter' fullWidth onChange={handleFilterChange} />
         </Box>
-        <ShadowScrollbar useFlex autoHide>
+        <ShadowScrollbar ref={scrollbarRef} useFlex autoHide>
           <Stack gap={1} sx={{ padding: 1 }}>
             {vehiclesCards}
           </Stack>
@@ -185,7 +214,32 @@ const Page: NextPage<PageProps> = () => {
   return (
     <RootContainer>
       <MapContainer>
-        <GoogleMaps onLoad={setMap}>{vehiclesMarkers}</GoogleMaps>
+        <GoogleMaps onLoad={setMap}>
+          {selectedVehicle?.location && (
+            <VehicleInfoWindow
+              onCloseClick={unSelectVehicle}
+              position={locationToLayLng(selectedVehicle.location)}
+              name={selectedVehicle.name}
+              driverName={
+                selectedVehicle.driver ? selectedVehicle.driver?.name : undefined
+              }
+              deviceName={selectedVehicle.device?.name}
+              speed={
+                isDefined(selectedVehicle.meta.speed) ? (
+                  <>
+                    {selectedVehicle.meta.speed}
+                    <Box component='span' color='text.secondary'>
+                      {' '}
+                      km/h
+                    </Box>
+                  </>
+                ) : null
+              }
+              status={selectedVehicle.status}
+            />
+          )}
+          {vehiclesMarkers}
+        </GoogleMaps>
       </MapContainer>
       {isDesktop && <VehiclesDrawer>{content}</VehiclesDrawer>}
       {!isDesktop && (

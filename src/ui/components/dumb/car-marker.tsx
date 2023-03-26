@@ -21,6 +21,7 @@ export const CarMarker = memo<CarMarkerProps>(function CarMarker({
   strokeColor = color,
   strokeOpacity,
   strokeWeight = 2,
+  children,
   ...props
 }) {
   const [marker, setMarker] = useState<google.maps.Marker>();
@@ -76,5 +77,9 @@ export const CarMarker = memo<CarMarkerProps>(function CarMarker({
     [props.onUnmount]
   );
 
-  return <MarkerF {...props} icon={icon} onLoad={handleLoad} onUnmount={handleUnmount} />;
+  return (
+    <MarkerF {...props} icon={icon} onLoad={handleLoad} onUnmount={handleUnmount}>
+      {children}
+    </MarkerF>
+  );
 });
