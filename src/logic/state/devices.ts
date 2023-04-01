@@ -1,40 +1,12 @@
 import type { DeviceModel } from '$logic/models/device';
-import { createStore } from '$modules/zustand';
+import { createEntityStore } from '$logic/utils/create-entity-store';
 import { useCallback, useMemo } from 'react';
 
-export const useDevicesStore = createStore({
+export const useDevicesStore = createEntityStore('device')<DeviceModel>({
   persist: true,
   devtools: true,
   name: 'void-mocked-devices',
-})(
-  {
-    devices: [] as DeviceModel[],
-  },
-  set => ({
-    setDevices: (devices: DeviceModel[]) =>
-      set(s => {
-        s.devices = devices;
-      }),
-    addDevice: (device: DeviceModel) =>
-      set(s => {
-        s.devices = [...s.devices, device];
-      }),
-    editDevice: (id?: string | number, device?: Partial<DeviceModel>) =>
-      set(s => {
-        const index = s.devices.findIndex(device => device.id === id);
-        if (index === -1) return;
-
-        s.devices[index] = {
-          ...s.devices[index],
-          ...device,
-        };
-      }),
-    deleteDevice: (id?: string | number) =>
-      set(s => {
-        s.devices = s.devices.filter(device => device.id !== id);
-      }),
-  })
-);
+});
 
 export const useDevices = () => useDevicesStore(useCallback(s => s.devices, []));
 export const useDevice = (id?: unknown) =>

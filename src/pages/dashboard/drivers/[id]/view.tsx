@@ -63,4 +63,9 @@ const Page: NextPage<PageProps> = () => {
 
 Page.layout = DashboardLayout;
 
+Page.auth = {
+  action: 'read',
+  subject: 'Driver',
+};
+
 export default Page;

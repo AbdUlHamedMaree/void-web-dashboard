@@ -12,6 +12,7 @@ import {
 } from '@mui/material';
 import { MenuPopover } from '$ui/components/shared/menu-popover';
 import { Link } from '$ui/components/shared/link';
+import { useCurrentUser } from '$logic/state/current-user';
 
 const MENU_OPTIONS = [
   {
@@ -31,6 +32,7 @@ export type DashboardLayoutAccountPopover = {};
 export const DashboardLayoutAccountPopover: React.FC<
   DashboardLayoutAccountPopover
 > = () => {
+  const user = useCurrentUser();
   const [open, setOpen] = useState<HTMLElement | null>(null);
 
   const handleOpen: MouseEventHandler<HTMLButtonElement> = event => {
@@ -81,10 +83,10 @@ export const DashboardLayoutAccountPopover: React.FC<
       >
         <Box sx={{ my: 1.5, px: 2.5 }}>
           <Typography variant='subtitle2' noWrap>
-            {'John Doe'}
+            {user?.name}
           </Typography>
           <Typography variant='body2' sx={{ color: 'text.secondary' }} noWrap>
-            {'Administrator'}
+            {user?.role}
           </Typography>
         </Box>
 

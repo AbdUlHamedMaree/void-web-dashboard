@@ -1,40 +1,12 @@
 import type { UserModel } from '$logic/models/user';
-import { createStore } from '$modules/zustand';
+import { createEntityStore } from '$logic/utils/create-entity-store';
 import { useCallback, useMemo } from 'react';
 
-export const useUsersStore = createStore({
+export const useUsersStore = createEntityStore('user')<UserModel>({
   persist: true,
   devtools: true,
   name: 'void-mocked-users',
-})(
-  {
-    users: [] as UserModel[],
-  },
-  set => ({
-    setUsers: (users: UserModel[]) =>
-      set(s => {
-        s.users = users;
-      }),
-    addUser: (user: UserModel) =>
-      set(s => {
-        s.users = [...s.users, user];
-      }),
-    editUser: (id?: string | number, user?: Partial<UserModel>) =>
-      set(s => {
-        const index = s.users.findIndex(user => user.id === id);
-        if (index === -1) return;
-
-        s.users[index] = {
-          ...s.users[index],
-          ...user,
-        };
-      }),
-    deleteUser: (id?: string | number) =>
-      set(s => {
-        s.users = s.users.filter(user => user.id !== id);
-      }),
-  })
-);
+});
 
 export const useUsers = () => useUsersStore(useCallback(s => s.users, []));
 export const useUser = (id?: unknown) =>

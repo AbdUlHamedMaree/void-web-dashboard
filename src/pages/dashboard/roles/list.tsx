@@ -75,7 +75,7 @@ Page.layout = DashboardLayout;
 
 Page.auth = {
   action: 'read',
-  subject: 'Vehicle',
+  subject: 'Role',
 };
 
 export default Page;

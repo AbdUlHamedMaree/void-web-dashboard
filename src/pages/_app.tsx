@@ -16,6 +16,7 @@ import 'nprogress/nprogress.css';
 import { AuthGuard } from '$ui/components/guards/auth';
 import type { NextPage } from 'next';
 import { Hydrate, QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ToastifyContainer } from '$ui/components/shared/toastify-container';
 
 const url = process.env.NEXT_PUBLIC_SITE_URL!;
 
@@ -100,6 +101,7 @@ const App: React.FC<AppProps> = ({
       <DefaultSeo {...DefaultSeoProps} />
       <CacheProvider value={emotionCache}>
         <TopProgressBar />
+        <ToastifyContainer />
         <Head>
           <meta name='viewport' content='initial-scale=1, width=device-width' />
         </Head>

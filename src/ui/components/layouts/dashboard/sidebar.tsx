@@ -1,7 +1,7 @@
 import { useEffect, useMemo } from 'react';
 import { styled } from '@mui/material/styles';
 import { Box, Drawer, Typography, Avatar } from '@mui/material';
-import { navConfig } from './nav-config';
+import { useNavigationConfig } from './nav-config';
 import { Scrollbar } from '$ui/components/shared/scrollbar';
 import { useRouter } from 'next/router';
 import { NavSection } from '$ui/components/shared/nav-section';
@@ -10,6 +10,7 @@ import { Link } from '$ui/components/shared/link';
 import { routes } from '$routes';
 import { DRAWER_WIDTH } from '$logic/constants';
 import { useIsDesktop } from '$logic/hooks/use-is-desktop';
+import { useCurrentUser } from '$logic/state/current-user';
 
 // ----------------------------------------------------------------------
 
@@ -39,8 +40,11 @@ export const DashboardLayoutSidebar: React.FC<DashboardLayoutSidebarProps> = ({
   onCloseSidebar,
 }) => {
   const { pathname } = useRouter();
-
   const isDesktop = useIsDesktop();
+
+  const navConfig = useNavigationConfig();
+
+  const user = useCurrentUser();
 
   useEffect(() => {
     if (isOpenSidebar) {
@@ -67,10 +71,10 @@ export const DashboardLayoutSidebar: React.FC<DashboardLayoutSidebarProps> = ({
             <Avatar src='/__mock/john-doe.png' alt='John Doe' />
             <Box sx={{ ml: 2 }}>
               <Typography variant='subtitle2' sx={{ color: 'text.primary' }}>
-                {'John Doe'}
+                {user?.name}
               </Typography>
               <Typography variant='body2' sx={{ color: 'text.secondary' }}>
-                {'Administrator'}
+                {user?.role}
               </Typography>
             </Box>
           </AccountStyle>
@@ -80,7 +84,7 @@ export const DashboardLayoutSidebar: React.FC<DashboardLayoutSidebarProps> = ({
         <Box sx={{ flexGrow: 1 }} />
       </Scrollbar>
     ),
-    []
+    [navConfig, user?.name, user?.role]
   );
 
   return (

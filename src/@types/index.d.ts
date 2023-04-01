@@ -1,6 +1,7 @@
 import type { Theme } from '@mui/material/styles';
 import type { Options } from '@mui/material';
 import type { NextComponentType } from 'next';
+import type { AuthGuardProps } from '$ui/components/guards/auth';
 
 declare module '@mui/material/useMediaQuery' {
   export default function useMediaQuery<TTheme = Theme>(

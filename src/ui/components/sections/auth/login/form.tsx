@@ -2,16 +2,23 @@ import { object, string } from 'yup';
 import { useCallback, useMemo } from 'react';
 import { Stack } from '@mui/material';
 import {
-  FormBuilder,
+  FormBuilderProvider,
   FormSubmitInput,
   PasswordInput,
   TextInput,
+  useFormBuilder,
 } from '@mrii/react-form-builder';
 import { useRouter } from 'next/router';
 import { mockData } from '$logic/helpers/mock-data';
 import { mockUser } from '$logic/models/user';
-import { storage } from '$logic/libs/storage';
 import '$modules/yup-empty-to-null';
+import { wait } from '$logic/utils/wait';
+import { toast } from 'react-toastify';
+import { useCurrentUserStore } from '$logic/state/current-user';
+import { useCurrentRulesStore } from '$logic/state/current-rules';
+import { AppAbilityBuilder } from '$logic/libs/casl';
+
+const emails = ['super.admin@void.com', 'admin@void.com', 'manager@void.com'];
 
 type FieldsType = {
   email: string;
@@ -25,6 +32,10 @@ const defaultValues: FieldsType = {
 
 export const AuthLoginFormSection: React.FC = () => {
   const { push } = useRouter();
+
+  const setUser = useCurrentUserStore(useCallback(s => s.setUser, []));
+  const setRules = useCurrentRulesStore(useCallback(s => s.setRules, []));
+
   const schema = useMemo(
     () =>
       object({
@@ -35,28 +46,42 @@ export const AuthLoginFormSection: React.FC = () => {
   );
 
   const onSubmit = useCallback(
-    (values: FieldsType) => {
+    async ({ email, password }: FieldsType) => {
+      // mock
+      await wait(600);
+
+      if (!emails.includes(email) || password !== '12345678') {
+        toast.error('Username or password are wrong');
+        return;
+      }
+
       mockData();
 
       const user = mockUser({
-        email: values.email,
+        email,
       });
-      storage.user.set(user);
 
-      storage.auth.set(true);
+      setUser(user);
+
+      const { can, build } = new AppAbilityBuilder();
+      can('manage', 'all');
+
+      setRules(build().rules);
 
       push('/dashboard/live');
     },
-    [push]
+    [push, setRules, setUser]
   );
 
+  const form = useFormBuilder({
+    defaultValues,
+    validation: schema,
+    onSubmit,
+    onError: console.error,
+  });
+
   return (
-    <FormBuilder<FieldsType>
-      defaultValues={defaultValues}
-      validation={schema}
-      onSubmit={onSubmit}
-      onError={errors => console.error(errors)}
-    >
+    <FormBuilderProvider {...form}>
       <Stack spacing={3}>
         <TextInput name='email' label='Email' />
         <PasswordInput name='password' label='Password' />
@@ -64,6 +89,6 @@ export const AuthLoginFormSection: React.FC = () => {
           Login
         </FormSubmitInput>
       </Stack>
-    </FormBuilder>
+    </FormBuilderProvider>
   );
 };

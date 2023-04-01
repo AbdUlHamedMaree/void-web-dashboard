@@ -1,40 +1,12 @@
 import type { DriverModel } from '$logic/models/driver';
-import { createStore } from '$modules/zustand';
+import { createEntityStore } from '$logic/utils/create-entity-store';
 import { useCallback, useMemo } from 'react';
 
-export const useDriversStore = createStore({
+export const useDriversStore = createEntityStore('driver')<DriverModel>({
   persist: true,
   devtools: true,
   name: 'void-mocked-drivers',
-})(
-  {
-    drivers: [] as DriverModel[],
-  },
-  set => ({
-    setDrivers: (drivers: DriverModel[]) =>
-      set(s => {
-        s.drivers = drivers;
-      }),
-    addDriver: (driver: DriverModel) =>
-      set(s => {
-        s.drivers = [...s.drivers, driver];
-      }),
-    editDriver: (id?: string | number, driver?: Partial<DriverModel>) =>
-      set(s => {
-        const index = s.drivers.findIndex(driver => driver.id === id);
-        if (index === -1) return;
-
-        s.drivers[index] = {
-          ...s.drivers[index],
-          ...driver,
-        };
-      }),
-    deleteDriver: (id?: string | number) =>
-      set(s => {
-        s.drivers = s.drivers.filter(driver => driver.id !== id);
-      }),
-  })
-);
+});
 
 export const useDrivers = () => useDriversStore(useCallback(s => s.drivers, []));
 export const useDriver = (id?: unknown) =>

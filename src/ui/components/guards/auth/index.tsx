@@ -1,77 +1,32 @@
-import React from 'react';
-import type { UrlObject } from 'url';
+import type { AppCaslActions, AppCaslSubjects } from '$logic/libs/casl';
+import { AbilityProvider } from '$logic/libs/casl';
+import { useCurrentAbility } from '$logic/state/current-rules';
+import React, { useLayoutEffect } from 'react';
 
 export type AuthGuardProps = {
-  unAuthRedirectUrl?: UrlObject | string;
-  // role?: VirtualRoleNameUnion | VirtualRoleNameUnion[];
+  action: AppCaslActions;
+  subject: AppCaslSubjects;
+  field?: string;
 
   onUnAuth?: () => void;
-  children?: React.ReactNode;
 };
 
-export const AuthGuard: React.FC<AuthGuardProps> = ({
+export const AuthGuard: React.FC<React.PropsWithChildren<AuthGuardProps>> = ({
+  action,
+  subject,
+  field,
   children,
-  // role,
 
-  // onUnAuth,
+  onUnAuth,
 }) => {
-  // const passRoleCheck = useMemo(() => passRoleGuard(role), [role]);
-  // const [passed, setPassed] = useState(false);
-  // const logout = useResolvedLogout();
+  const ability = useCurrentAbility();
 
-  // const handleUnAuth = useCallback(() => {
-  //   onUnAuth?.();
-  //   logout();
-  // }, [logout, onUnAuth]);
+  useLayoutEffect(() => {
+    if (ability.cannot(action, subject, field)) onUnAuth?.();
+  }, [ability, action, field, onUnAuth, subject]);
 
-  // const setUser = useAuth(s => s.setUser);
+  // TODO: Not Allowed Page
+  if (ability.cannot(action, subject, field)) return <>not allowed</>;
 
-  // const { data, isLoading, isIdle } = useGetMeService.query(
-  //   {},
-  //   {
-  //     onSuccess: ({ data: user }) => {
-  //       setUser(user);
-  //     },
-  //     onError: () => {
-  //       logout();
-  //     },
-  //     refetchOnReconnect: false,
-  //     refetchOnMount: false,
-  //     refetchOnWindowFocus: false,
-  //     refetchInterval: false,
-  //     refetchIntervalInBackground: false,
-  //     //
-  //     keepPreviousData: true,
-  //     staleTime: 0,
-  //     cacheTime: Infinity,
-  //     optimisticResults: true,
-  //     structuralSharing: true,
-  //     retryOnMount: false,
-  //     retry: false,
-  //   }
-  // );
-  // const user = useMemo(() => data?.data, [data?.data]);
-
-  // useEffect(() => {
-  //   if (isLoading || isIdle) return;
-  //   if (!isDefined(user) || !passRoleCheck(user.roles?.map(el => el.name)))
-  //     return handleUnAuth();
-  //   setPassed(true);
-  // }, [handleUnAuth, isLoading, user, passRoleCheck, isIdle]);
-
-  // TODO: splash screen
-  // if (!passed) return <>loading...</>;
-  if (false) return <>loading...</>;
-
-  return <>{children}</>;
+  return <AbilityProvider ability={ability}>{children}</AbilityProvider>;
 };
-
-// const passRoleGuard =
-//   (allowed?: VirtualRoleNameUnion | VirtualRoleNameUnion[]) =>
-//   (roles?: VirtualRoleNameUnion[]) => {
-//     if (isNil(allowed)) return true;
-//     if (isNil(roles)) return false;
-//     if (isStringFull(allowed)) return roles.includes(allowed);
-//     if (isArrayFull(allowed)) return allowed.some(role => roles.includes(role));
-//     return false;
-//   };
