@@ -10,7 +10,7 @@ import { Link } from '$ui/components/shared/link';
 import { routes } from '$routes';
 import { DRAWER_WIDTH } from '$logic/constants';
 import { useIsDesktop } from '$logic/hooks/use-is-desktop';
-import { useCurrentUser } from '$logic/state/current-user';
+import { useCurrentUser } from '$logic/hooks/use-current-user';
 
 // ----------------------------------------------------------------------
 
@@ -74,7 +74,7 @@ export const DashboardLayoutSidebar: React.FC<DashboardLayoutSidebarProps> = ({
                 {user?.name}
               </Typography>
               <Typography variant='body2' sx={{ color: 'text.secondary' }}>
-                {user?.role}
+                {user?.role.name}
               </Typography>
             </Box>
           </AccountStyle>
@@ -84,7 +84,7 @@ export const DashboardLayoutSidebar: React.FC<DashboardLayoutSidebarProps> = ({
         <Box sx={{ flexGrow: 1 }} />
       </Scrollbar>
     ),
-    [navConfig, user?.name, user?.role]
+    [navConfig, user?.name, user?.role.name]
   );
 
   return (

@@ -12,11 +12,14 @@ import Head from 'next/head';
 import React, { useEffect, useMemo, useState } from 'react';
 import { isServer } from '$logic/libs/checks';
 import { scrollToWindowHash } from '$logic/utils/scroll-to-window-hash';
-import 'nprogress/nprogress.css';
 import { AuthGuard } from '$ui/components/guards/auth';
 import type { NextPage } from 'next';
 import { Hydrate, QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ToastifyContainer } from '$ui/components/shared/toastify-container';
+import { SessionProvider } from 'next-auth/react';
+
+import 'react-toastify/dist/ReactToastify.css';
+import 'nprogress/nprogress.css';
 
 const url = process.env.NEXT_PUBLIC_SITE_URL!;
 
@@ -67,7 +70,7 @@ type AppProps = {
 
 const App: React.FC<AppProps> = ({
   Component,
-  pageProps,
+  pageProps: { session, ...pageProps },
   router,
   emotionCache = clientSideEmotionCache,
 }) => {
@@ -77,7 +80,7 @@ const App: React.FC<AppProps> = ({
     () =>
       Component.layout ??
       (({ children }: { children?: React.ReactNode }) => <>{children}</>),
-    [Component]
+    [Component.layout]
   );
 
   useEffect(() => {
@@ -90,11 +93,13 @@ const App: React.FC<AppProps> = ({
     if (Component?.auth)
       return (
         <AuthGuard {...Component.auth}>
-          <Component {...pageProps} />
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
         </AuthGuard>
       );
     return <Component {...pageProps} />;
-  }, [Component, pageProps]);
+  }, [Component, Layout, pageProps]);
 
   return (
     <>
@@ -109,9 +114,9 @@ const App: React.FC<AppProps> = ({
           <CssBaseline />
 
           <QueryClientProvider client={queryClient}>
-            <Hydrate state={pageProps.dehydratedState}>
-              <Layout>{page}</Layout>
-            </Hydrate>
+            <SessionProvider session={session}>
+              <Hydrate state={pageProps.dehydratedState}>{page}</Hydrate>
+            </SessionProvider>
           </QueryClientProvider>
         </ThemeProvider>
       </CacheProvider>

@@ -47,7 +47,7 @@ const Page: NextPage<PageProps> = () => {
       <TextColumn field='id' />
       <TextColumn field='name' />
       <TextColumn field='email' />
-      <TextColumn field='role' />
+      <TextColumn field='role.name' />
       <TextColumn field='phoneNumber' />
       <AppActionsColumn
         onShow={showHandler}

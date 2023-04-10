@@ -2,22 +2,21 @@ import React, { useMemo } from 'react';
 import { Box, Grid } from '@mui/material';
 import type { DefaultValues } from '@mrii/react-form-builder';
 import { FormBuilder } from '@mrii/react-form-builder';
-import { FormSubmitInput, SelectInput, TextInput } from '@mrii/react-form-builder';
-import type { AppRoleUnion, UserModel } from '$logic/models/user';
-import { AppRoleToReadable } from '$logic/models/user';
-import { AppRoleEnum } from '$logic/models/user';
-import type { SchemaOf } from 'yup';
+import { FormSubmitInput, TextInput } from '@mrii/react-form-builder';
+import type { UserModel } from '$logic/models/user';
+import type { ObjectSchema } from 'yup';
 import { object, string } from 'yup';
 import type { SubmitHandler } from 'react-hook-form';
 import '$modules/yup-empty-to-null';
 import { NewEditPage } from '$ui/components/dumb/new&edit-page';
+import { SelectUserRoleInput } from '$ui/components/dumb/fields';
 
-type FormFields = Omit<UserModel, 'id'>;
+type FormFields = Omit<UserModel, 'id' | 'role'> & { role: string };
 
-const schema: SchemaOf<FormFields> = object({
+const schema: ObjectSchema<FormFields> = object({
   name: string().trim().required(),
   email: string().trim().email().required(),
-  role: string().oneOf(Object.values<AppRoleUnion>(AppRoleEnum)).required(),
+  role: string().trim().required(),
   phoneNumber: string().trim().required(),
 });
 
@@ -64,7 +63,7 @@ export const DashboardUsersNewEditForm: React.FC<DashboardUsersNewEditFormProps>
             <TextInput name='email' fullWidth />
           </Grid>
           <Grid md={6} xs={12} item>
-            <SelectInput name='role' items={AppRoleToReadable} fullWidth />
+            <SelectUserRoleInput fullWidth />
           </Grid>
           <Grid md={6} xs={12} item>
             <TextInput name='phoneNumber' fullWidth />

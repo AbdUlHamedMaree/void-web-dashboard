@@ -35,7 +35,7 @@ export const ListPage: React.FC<React.PropsWithChildren<ListPageProps>> = ({
       </Box>
       <Card sx={{ mt: 4 }}>
         <TableBuilder
-          disableSelectionOnClick
+          disableRowSelectionOnClick
           disableVirtualization
           {...props}
           sx={{ height: 'calc(100vh - 210px)', minHeight: 400, ...props.sx }}
@@ -48,7 +48,12 @@ export const ListPage: React.FC<React.PropsWithChildren<ListPageProps>> = ({
                 ...props.initialState?.columns?.columnVisibilityModel,
               },
             },
-            pagination: { pageSize: 25, ...props.initialState?.pagination },
+            pagination: {
+              paginationModel: {
+                pageSize: 25,
+                ...props.initialState?.pagination?.paginationModel,
+              },
+            },
           }}
         >
           {children}

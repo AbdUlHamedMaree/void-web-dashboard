@@ -1,3 +1,8 @@
+import type { DeviceModel } from '$logic/models/device';
+import type { DriverModel } from '$logic/models/driver';
+import type { RoleModel } from '$logic/models/role';
+import type { UserModel } from '$logic/models/user';
+import type { VehicleModel } from '$logic/models/vehicle';
 import type {
   CreateAbility,
   ExtractSubjectType,
@@ -15,10 +20,15 @@ export type AppCaslActions = 'create' | 'read' | 'update' | 'delete' | 'manage';
 
 export type AppCaslSubjects =
   | 'Vehicle'
+  | VehicleModel
   | 'Driver'
+  | DriverModel
   | 'User'
+  | UserModel
   | 'Device'
+  | DeviceModel
   | 'Role'
+  | RoleModel
   | 'LivePreview'
   | 'all';
 

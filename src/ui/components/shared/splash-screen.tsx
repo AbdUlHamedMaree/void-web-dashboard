@@ -10,7 +10,8 @@ export const SplashScreen: React.FC<SplashScreenProps> = () => {
       display='flex'
       justifyContent='center'
       alignItems='center'
-      sx={{ inset: 0, backgroundColor: 'paper.default' }}
+      zIndex={99999}
+      sx={{ inset: 0, backgroundColor: 'background.paper' }}
     >
       <Logo fontSize={[100, 150, 200, 250]} />
     </Box>

@@ -1,5 +1,5 @@
+import { useCurrentAbility } from '$logic/hooks/use-current-ability';
 import type { AppCaslSubjects } from '$logic/libs/casl';
-import { useCurrentAbility } from '$logic/state/current-rules';
 import type { PathnameUrlObject } from '$routes';
 import {
   AirlineSeatReclineNormalOutlined,

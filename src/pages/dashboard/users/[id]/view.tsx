@@ -28,7 +28,7 @@ const Page: NextPage<PageProps> = () => {
           <KeyValueDetails label='Name' value={user.name} />
         </Grid>
         <Grid item md={6} xs={12}>
-          <KeyValueDetails label='Phone Number' value={user.role} />
+          <KeyValueDetails label='Phone Number' value={user.role.name} />
         </Grid>
         <Grid item md={6} xs={12}>
           <KeyValueDetails label='Email' value={user.email} />

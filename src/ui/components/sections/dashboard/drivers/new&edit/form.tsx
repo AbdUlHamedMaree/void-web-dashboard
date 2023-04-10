@@ -4,7 +4,7 @@ import type { DefaultValues } from '@mrii/react-form-builder';
 import { FormBuilder } from '@mrii/react-form-builder';
 import { FormSubmitInput, TextInput } from '@mrii/react-form-builder';
 import type { DriverModel } from '$logic/models/driver';
-import type { SchemaOf } from 'yup';
+import type { ObjectSchema } from 'yup';
 import { object, string } from 'yup';
 import type { SubmitHandler } from 'react-hook-form';
 import '$modules/yup-empty-to-null';
@@ -16,7 +16,7 @@ type FormFields = Omit<DriverModel, 'id' | 'vehicle' | 'device'> & {
   device?: string;
 };
 
-const schema: SchemaOf<FormFields> = object({
+const schema: ObjectSchema<FormFields> = object({
   name: string().trim().required(),
   email: string().trim().email().required(),
   phoneNumber: string().trim().required(),

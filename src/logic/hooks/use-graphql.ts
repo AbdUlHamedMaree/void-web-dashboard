@@ -3,7 +3,7 @@ import { type TypedDocumentNode } from '@graphql-typed-document-node/core';
 import type { UseMutationOptions, UseQueryOptions } from '@tanstack/react-query';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import type { OperationDefinitionNode } from 'graphql';
-import type { RequestInit } from 'graphql-request/dist/types.dom';
+import type { RequestInit } from 'graphql-request/build/esm/types.dom';
 
 export const useGraphQL = <TResult, TError, TVariables>(
   document: TypedDocumentNode<TResult, TVariables>,

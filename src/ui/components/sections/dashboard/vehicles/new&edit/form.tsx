@@ -5,7 +5,7 @@ import { DateInput } from '@mrii/react-form-builder';
 import { FormBuilder } from '@mrii/react-form-builder';
 import { SelectInput } from '@mrii/react-form-builder';
 import { FormSubmitInput, TextInput } from '@mrii/react-form-builder';
-import type { SchemaOf } from 'yup';
+import type { ObjectSchema } from 'yup';
 import { date } from 'yup';
 import { object, string } from 'yup';
 import type { SubmitHandler } from 'react-hook-form';
@@ -32,7 +32,7 @@ type FormFields = Omit<
   device?: string;
 };
 
-const schema: SchemaOf<FormFields> = object({
+const schema: ObjectSchema<FormFields> = object({
   name: string().trim().required(),
   vin: string().trim().required(),
   plateNumber: string().trim().required(),

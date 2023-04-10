@@ -3,7 +3,7 @@ import { Box, Grid } from '@mui/material';
 import type { DefaultValues } from '@mrii/react-form-builder';
 import { FormBuilder } from '@mrii/react-form-builder';
 import { FormSubmitInput, TextInput } from '@mrii/react-form-builder';
-import type { SchemaOf } from 'yup';
+import type { ObjectSchema } from 'yup';
 import { object, string } from 'yup';
 import type { SubmitHandler } from 'react-hook-form';
 import type { DeviceModel } from '$logic/models/device';
@@ -16,7 +16,7 @@ type FormFields = Omit<DeviceModel, 'id' | 'driver' | 'vehicle'> & {
   vehicle?: string;
 };
 
-const schema: SchemaOf<FormFields> = object({
+const schema: ObjectSchema<FormFields> = object({
   imei: string().trim().required(),
   name: string().trim().required(),
   model: string().trim().required(),

@@ -12,7 +12,7 @@ import {
 } from '@mui/material';
 import { MenuPopover } from '$ui/components/shared/menu-popover';
 import { Link } from '$ui/components/shared/link';
-import { useCurrentUser } from '$logic/state/current-user';
+import { useCurrentUser } from '$logic/hooks/use-current-user';
 
 const MENU_OPTIONS = [
   {
@@ -86,7 +86,7 @@ export const DashboardLayoutAccountPopover: React.FC<
             {user?.name}
           </Typography>
           <Typography variant='body2' sx={{ color: 'text.secondary' }} noWrap>
-            {user?.role}
+            {user?.role.name}
           </Typography>
         </Box>
 
