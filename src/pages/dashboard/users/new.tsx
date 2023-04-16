@@ -45,7 +45,7 @@ const Page: NextPage<PageProps> = () => {
 Page.layout = DashboardLayout;
 
 Page.auth = {
-  action: 'read',
+  action: 'create',
   subject: 'User',
 };
 

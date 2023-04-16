@@ -13,7 +13,7 @@ export const KeyValueDetails: React.FC<KeyValueDetailsProps> = ({
   href,
 }) => {
   return (
-    <>
+    <div>
       <Typography variant='overline' color='primary'>
         {label}
       </Typography>
@@ -24,6 +24,6 @@ export const KeyValueDetails: React.FC<KeyValueDetailsProps> = ({
       ) : (
         <Typography mt={1}>{value}</Typography>
       )}
-    </>
+    </div>
   );
 };

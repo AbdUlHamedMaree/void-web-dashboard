@@ -6,16 +6,23 @@ import { ShadowScrollbar } from '$ui/components/shared/shadow-scrollbar';
 import { useIsDesktop } from '$logic/hooks/use-is-desktop';
 import { isIOS } from '$logic/utils/is-ios';
 import { useVehicle, useVehicles } from '$logic/state/vehicles';
+import type { GoogleMapsProps } from '$ui/components/dumb/google-maps';
 import { GoogleMaps } from '$ui/components/dumb/google-maps';
 import { CarMarker } from '$ui/components/dumb/car-marker';
 import { useVehiclesService } from '$logic/_mock/use-vehicles-service';
 import { VehicleSidebarCard } from '$ui/components/sections/dashboard/live';
 import { routes } from '$routes';
-import { locationToLayLng } from '$logic/utils/location-to-lat-lng';
 import { VehicleInfoWindow } from '$ui/components/dumb/vehicle-info-window';
 import { isDefined } from '$modules/checks';
 import type Scrollbars from 'react-custom-scrollbars-2';
 import { useMemoizedCallback } from '$logic/hooks/use-memoized-callback';
+import produce from 'immer';
+import { useVehicleStatusToColorDict } from '$logic/hooks/use-vehicle-status-to-color-getter';
+import type { TripPoint } from '$logic/_mock/cycle-vehicle-trips';
+import type { VehicleStatusUnion } from '$logic/models/vehicle';
+import { DrawingManagerF, PolylineF } from '@react-google-maps/api';
+
+const googleMapsLibraries: GoogleMapsProps['libraries'] = ['drawing'];
 
 const drawerBleeding = 24;
 
@@ -37,7 +44,7 @@ const VehiclesDrawer = styled('div')(({ theme }) => ({
   flexDirection: 'column',
   flexShrink: 0,
   width: 340,
-  background: theme.palette.background.default,
+  background: theme.palette.background.paper,
 }));
 
 const MapContainer = styled('div')(({}) => ({
@@ -51,6 +58,7 @@ const Page: NextPage<PageProps> = () => {
 
   const vehicles = useVehicles();
   const isDesktop = useIsDesktop();
+  const vehicleStatusToColor = useVehicleStatusToColorDict();
 
   const scrollbarRef = useRef<Scrollbars>(null);
 
@@ -60,6 +68,12 @@ const Page: NextPage<PageProps> = () => {
   const [focusedVehicleId, setFocusedVehicleId] = useState<string>();
   const [hiddenVehiclesIds, setHiddenVehiclesIds] = useState<string[]>([]);
   const [map, setMap] = useState<google.maps.Map>();
+  const [trip, setTrip] = useState<TripPoint[]>([]);
+
+  const toggleFocusedVehicle = useCallback(
+    (id: string) => setFocusedVehicleId(v => (v === id ? undefined : id)),
+    []
+  );
 
   const selectedVehicle = useVehicle(selectedVehicleId);
 
@@ -145,7 +159,7 @@ const Page: NextPage<PageProps> = () => {
           focused={vehicle.id === focusedVehicleId}
           selected={vehicle.id === selectedVehicleId}
           hidden={hiddenVehiclesIds.includes(vehicle.id)}
-          setFocusVehicle={setFocusedVehicleId}
+          setFocusVehicle={toggleFocusedVehicle}
           toggleHideVehicle={toggleHideVehicle}
         />
       )),
@@ -154,6 +168,7 @@ const Page: NextPage<PageProps> = () => {
       focusedVehicleId,
       selectedVehicleId,
       hiddenVehiclesIds,
+      toggleFocusedVehicle,
       toggleHideVehicle,
     ]
   );
@@ -166,13 +181,14 @@ const Page: NextPage<PageProps> = () => {
           vehicle.location && vehicle.rotation ? (
             <CarMarker
               key={vehicle.id}
-              position={{ lat: vehicle.location[0], lng: vehicle.location[1] }}
+              position={vehicle.location}
               rotation={vehicle.rotation}
               onClick={selectVehicle(vehicle.id)}
+              color={vehicle.status ? vehicleStatusToColor[vehicle.status] : undefined}
             />
           ) : null
         ),
-    [filteredVehicles, hiddenVehiclesIds, selectVehicle]
+    [filteredVehicles, hiddenVehiclesIds, selectVehicle, vehicleStatusToColor]
   );
 
   const focusedVehicle = useMemo(
@@ -185,9 +201,7 @@ const Page: NextPage<PageProps> = () => {
 
   const focusedVehicleCenter = useMemo(
     () =>
-      focusedVehicle && focusedVehicle.location
-        ? { lat: focusedVehicle.location[0], lng: focusedVehicle.location[1] }
-        : undefined,
+      focusedVehicle && focusedVehicle.location ? focusedVehicle.location : undefined,
     [focusedVehicle]
   );
 
@@ -210,15 +224,64 @@ const Page: NextPage<PageProps> = () => {
     ),
     [handleFilterChange, vehiclesCards]
   );
+  const mockTrip = useMemo(
+    () => ({
+      trip,
+      setRotation: (rotation: number) => {
+        setTrip(
+          produce(trip => {
+            const last = trip.at(-1);
+            if (last) last.rotation = rotation;
+          })
+        );
+      },
+      setStatus: (status: VehicleStatusUnion) => {
+        setTrip(
+          produce(trip => {
+            const last = trip.at(-1);
+            if (last) last.status = status;
+          })
+        );
+      },
+      removeLast: () => {
+        setTrip(trip => trip.slice(0, -1));
+      },
+      append: (point: TripPoint) => {
+        setTrip(trip => [...trip, point]);
+      },
+      get: () => JSON.stringify(trip),
+    }),
+    [trip]
+  );
+  useEffect(() => {
+    (window as any).mockTrip = mockTrip;
+  }, [mockTrip]);
+
+  const onRightClick = useCallback(
+    (e: google.maps.MapMouseEvent) => {
+      e.latLng &&
+        mockTrip.append({
+          ...e.latLng.toJSON(),
+          rotation: 0,
+          status: 'moving',
+        });
+    },
+    [mockTrip]
+  );
 
   return (
     <RootContainer>
       <MapContainer>
-        <GoogleMaps onLoad={setMap}>
+        <GoogleMaps
+          libraries={googleMapsLibraries}
+          onLoad={setMap}
+          onRightClick={onRightClick}
+        >
+          <DrawingManagerF />
           {selectedVehicle?.location && (
             <VehicleInfoWindow
               onCloseClick={unSelectVehicle}
-              position={locationToLayLng(selectedVehicle.location)}
+              position={selectedVehicle.location}
               name={selectedVehicle.name}
               driverName={
                 selectedVehicle.driver ? selectedVehicle.driver?.name : undefined
@@ -239,6 +302,15 @@ const Page: NextPage<PageProps> = () => {
             />
           )}
           {vehiclesMarkers}
+          {trip.map(point => (
+            <CarMarker
+              key={JSON.stringify(point)}
+              position={point}
+              rotation={point.rotation}
+              color={vehicleStatusToColor[point.status]}
+            />
+          ))}
+          <PolylineF path={trip} />
         </GoogleMaps>
       </MapContainer>
       {isDesktop && <VehiclesDrawer>{content}</VehiclesDrawer>}

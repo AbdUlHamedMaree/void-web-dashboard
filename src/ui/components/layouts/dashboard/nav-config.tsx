@@ -4,6 +4,7 @@ import type { PathnameUrlObject } from '$routes';
 import {
   AirlineSeatReclineNormalOutlined,
   DirectionsCarOutlined,
+  HistoryOutlined,
   LiveTv,
   MemoryOutlined,
   PeopleAltOutlined,
@@ -73,6 +74,11 @@ export const useNavigationConfig = () => {
           },
           'Device'
         ),
+        ability.can('read', 'TripsHistory') && {
+          title: 'Trips History',
+          path: '/dashboard/trips-history',
+          icon: <HistoryOutlined />,
+        },
       ].filter(Boolean) as NavConfigItem[],
     [ability, getResourceConfig]
   );

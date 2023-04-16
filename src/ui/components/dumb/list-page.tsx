@@ -9,7 +9,7 @@ import { DefaultContainer } from './default-container';
 
 export type ListPageProps = {
   resourceTitle?: React.ReactNode;
-  newButtonUrl: NextUrl;
+  newButtonUrl?: NextUrl;
 } & TableBuilderProps;
 
 export const ListPage: React.FC<React.PropsWithChildren<ListPageProps>> = ({
@@ -24,14 +24,16 @@ export const ListPage: React.FC<React.PropsWithChildren<ListPageProps>> = ({
         sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
       >
         <Typography variant='h4'>{resourceTitle} List</Typography>
-        <Button
-          component={NextLinkComposed}
-          variant='contained'
-          to={newButtonUrl}
-          startIcon={<Add />}
-        >
-          New
-        </Button>
+        {newButtonUrl && (
+          <Button
+            component={NextLinkComposed}
+            variant='contained'
+            to={newButtonUrl}
+            startIcon={<Add />}
+          >
+            New
+          </Button>
+        )}
       </Box>
       <Card sx={{ mt: 4 }}>
         <TableBuilder

@@ -50,7 +50,7 @@ const VehiclesDrawer = styled('div')(({ theme }) => ({
   flexDirection: 'column',
   flexShrink: 0,
   width: 340,
-  background: theme.palette.background.default,
+  background: theme.palette.background.paper,
 }));
 
 const MapContainer = styled('div')(({}) => ({
@@ -79,8 +79,7 @@ const Page: NextPage<PageProps> = () => {
   );
 
   useEffect(() => {
-    if (vehicle?.location)
-      map?.setCenter({ lat: vehicle?.location[0], lng: vehicle?.location[1] });
+    if (vehicle?.location) map?.setCenter(vehicle.location);
   }, [vehicle?.location, map]);
 
   const content = useMemo(() => {
@@ -296,10 +295,7 @@ const Page: NextPage<PageProps> = () => {
   }, [vehicle]);
 
   const initialCenter = useMemo(
-    () =>
-      vehicle?.location
-        ? { lat: vehicle.location[0], lng: vehicle.location[1] }
-        : undefined,
+    () => vehicle?.location ?? undefined,
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );
@@ -313,10 +309,7 @@ const Page: NextPage<PageProps> = () => {
       <MapContainer>
         <GoogleMaps center={initialCenter} onLoad={setMap}>
           {vehicle.location && (
-            <CarMarker
-              position={{ lat: vehicle.location[0], lng: vehicle.location[1] }}
-              rotation={vehicle.rotation}
-            />
+            <CarMarker position={vehicle.location} rotation={vehicle.rotation} />
           )}
         </GoogleMaps>
       </MapContainer>

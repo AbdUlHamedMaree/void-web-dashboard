@@ -19,6 +19,7 @@ import React, { createContext } from 'react';
 export type AppCaslActions = 'create' | 'read' | 'update' | 'delete' | 'manage';
 
 export type AppCaslSubjects =
+  // Resources
   | 'Vehicle'
   | VehicleModel
   | 'Driver'
@@ -29,7 +30,9 @@ export type AppCaslSubjects =
   | DeviceModel
   | 'Role'
   | RoleModel
+  // Pages
   | 'LivePreview'
+  | 'TripsHistory'
   | 'all';
 
 export type AppCaslPossibleAbilities = [AppCaslActions, AppCaslSubjects];

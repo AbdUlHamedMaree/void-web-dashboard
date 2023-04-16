@@ -1,11 +1,7 @@
 import { useVehicles, useVehiclesStore } from '$logic/state/vehicles';
 import { useEffect, useMemo } from 'react';
-import { carTrip01 } from './car-trips';
 import { useIntervalSignal } from '$logic/hooks/use-interval-signal';
-
-const tripIdToTrip = {
-  1: carTrip01,
-};
+import { cycledTripIdToCycledTrip } from './cycle-vehicle-trips';
 
 export const useVehicleService = (vehicleId?: string) => {
   const vehicles = useVehicles();
@@ -20,7 +16,7 @@ export const useVehicleService = (vehicleId?: string) => {
   useEffect(() => {
     if (!vehicle || !vehicle._mock) return;
 
-    const trip = tripIdToTrip[vehicle._mock.tripId as 1];
+    const trip = cycledTripIdToCycledTrip[vehicle._mock.tripId as 1];
     const newIndex =
       vehicle._mock.currentIndex + 1 >= trip.length ? 0 : vehicle._mock.currentIndex + 1;
 
@@ -30,7 +26,7 @@ export const useVehicleService = (vehicleId?: string) => {
         currentIndex: newIndex,
         tripId: vehicle._mock.tripId,
       },
-      location: currentStep.location,
+      location: currentStep,
       rotation: currentStep.rotation,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps

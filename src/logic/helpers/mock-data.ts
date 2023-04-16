@@ -4,32 +4,41 @@ import type { DriverModel } from '$logic/models/driver';
 import { mockDriver } from '$logic/models/driver';
 import { mockUser } from '$logic/models/user';
 import type { VehicleModel } from '$logic/models/vehicle';
+import { mockVehicleMeta } from '$logic/models/vehicle';
 import { mockPureVehicle } from '$logic/models/vehicle';
 import { useDevicesStore } from '$logic/state/devices';
 import { useDriversStore } from '$logic/state/drivers';
 import { useUsersStore } from '$logic/state/users';
 import { useVehiclesStore } from '$logic/state/vehicles';
-import { carTrip01 } from '$logic/_mock/car-trips';
+import { cycledTripIdToCycledTrip } from '$logic/_mock/cycle-vehicle-trips';
 import { initialRoles, useRolesStore } from '$logic/state/roles';
 import * as m from '@mrii/mock';
+import { vehicleTripIdToVehicleTrip } from '$logic/_mock/vehicles-trips';
+import type { TripModel } from '$logic/models/trip';
+import { mockTrip, mockTripPoint } from '$logic/models/trip';
+import { useTripsStore } from '$logic/state/trips';
 
 export const mockData = () => {
-  const count = m.number(3, 5);
+  const count = m.number(5, 10);
+
   const drivers: DriverModel[] = [];
   const vehicles: VehicleModel[] = [];
   const devices: DeviceModel[] = [];
 
+  const trips: TripModel[] = [];
+
   for (let index = 0; index < count; index++) {
     const pureDriver = mockDriver();
+    const mockCycledTrip = cycledTripIdToCycledTrip[index as 1];
     const pureVehicle = mockPureVehicle(
-      index === 0
+      mockCycledTrip
         ? {
             _mock: {
-              tripId: 1,
+              tripId: index,
               currentIndex: 0,
             },
-            location: carTrip01[0].location,
-            rotation: carTrip01[0].rotation,
+            location: mockCycledTrip[0],
+            rotation: mockCycledTrip[0].rotation,
             status: 'moving',
           }
         : {
@@ -58,10 +67,37 @@ export const mockData = () => {
       vehicle: pureVehicle,
     };
     devices.push(device);
+
+    const vehicleTrip = vehicleTripIdToVehicleTrip[index as 0];
+    console.log({ vehicleTrip });
+    if (!vehicleTrip) continue;
+
+    const trip = mockTrip({
+      vehicle: pureVehicle,
+      driver: pureDriver,
+      device: pureDevice,
+      points: vehicleTrip.map(point => {
+        const moving = point.status === 'moving';
+        return mockTripPoint({
+          location: { lat: point.lat, lng: point.lng },
+          rotation: point.rotation,
+          status: point.status,
+          meta: mockVehicleMeta({
+            speed: moving ? m.number(10, 250) : 0,
+            engineLoad: moving ? m.number(10, 100) : 0,
+            engineRPM: moving ? m.number(1000, 16384) : 0,
+          }),
+        });
+      }),
+    });
+
+    trips.push(trip);
   }
   useDriversStore.setState({ drivers });
   useVehiclesStore.setState({ vehicles });
   useDevicesStore.setState({ devices });
+
+  useTripsStore.setState({ trips });
 
   useRolesStore.setState({ roles: initialRoles });
 
@@ -71,7 +107,7 @@ export const mockData = () => {
         mockUser({
           role: initialRoles[m.pick(1, 2)],
         }),
-      m.number(6, 10)
+      m.number(3, 6)
     ),
   });
 };

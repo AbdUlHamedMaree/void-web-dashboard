@@ -1,11 +1,8 @@
 import { useVehicles, useVehiclesStore } from '$logic/state/vehicles';
 import { useEffect, useMemo } from 'react';
-import { carTrip01 } from './car-trips';
-import { useIntervalSignal } from '$logic/hooks/use-interval-signal';
 
-const tripIdToTrip = {
-  1: carTrip01,
-};
+import { useIntervalSignal } from '$logic/hooks/use-interval-signal';
+import { cycledTripIdToCycledTrip } from './cycle-vehicle-trips';
 
 export const useVehiclesService = () => {
   const vehicles = useVehicles();
@@ -21,7 +18,7 @@ export const useVehiclesService = () => {
     mockedVehicles.map(vehicle => {
       if (!vehicle._mock) return;
 
-      const trip = tripIdToTrip[vehicle._mock.tripId as 1];
+      const trip = cycledTripIdToCycledTrip[vehicle._mock.tripId as 1];
       const newIndex =
         vehicle._mock.currentIndex + 1 >= trip.length
           ? 0
@@ -33,7 +30,7 @@ export const useVehiclesService = () => {
           currentIndex: newIndex,
           tripId: vehicle._mock.tripId,
         },
-        location: currentStep.location,
+        location: currentStep,
         rotation: currentStep.rotation,
       });
     });

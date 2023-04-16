@@ -46,6 +46,12 @@ export type AppRoutesMap = {
     live: {
       index: PathnameUrlObjectFunction;
     };
+    'trips-history': {
+      '[id]': {
+        view: PathnameUrlObjectFunction;
+      };
+      list: PathnameUrlObjectFunction;
+    };
     users: {
       '[id]': {
         edit: PathnameUrlObjectFunction;
