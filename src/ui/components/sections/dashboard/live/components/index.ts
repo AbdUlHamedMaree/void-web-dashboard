@@ -1,1 +1,1 @@
-export * from './car-sidebar-card';
+export * from './vehicle-sidebar-card';

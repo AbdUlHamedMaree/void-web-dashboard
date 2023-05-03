@@ -1,12 +1,11 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { NextPage } from 'next';
 import { DashboardLayout } from '$ui/components/layouts/dashboard';
-import { Box, Stack, styled, SwipeableDrawer, TextField } from '@mui/material';
+import { Box, Stack, styled, SwipeableDrawer, Tab, TextField } from '@mui/material';
 import { ShadowScrollbar } from '$ui/components/shared/shadow-scrollbar';
 import { useIsDesktop } from '$logic/hooks/use-is-desktop';
 import { isIOS } from '$logic/utils/is-ios';
 import { useVehicle, useVehicles } from '$logic/state/vehicles';
-import type { GoogleMapsProps } from '$ui/components/dumb/google-maps';
 import { GoogleMaps } from '$ui/components/dumb/google-maps';
 import { CarMarker } from '$ui/components/dumb/car-marker';
 import { useVehiclesService } from '$logic/_mock/use-vehicles-service';
@@ -16,13 +15,16 @@ import { VehicleInfoWindow } from '$ui/components/dumb/vehicle-info-window';
 import { isDefined } from '$modules/checks';
 import type Scrollbars from 'react-custom-scrollbars-2';
 import { useMemoizedCallback } from '$logic/hooks/use-memoized-callback';
-import produce from 'immer';
+import { produce } from 'immer';
 import { useVehicleStatusToColorDict } from '$logic/hooks/use-vehicle-status-to-color-getter';
 import type { TripPoint } from '$logic/_mock/cycle-vehicle-trips';
 import type { VehicleStatusUnion } from '$logic/models/vehicle';
-import { DrawingManagerF, PolylineF } from '@react-google-maps/api';
-
-const googleMapsLibraries: GoogleMapsProps['libraries'] = ['drawing'];
+import { PolylineF } from '@react-google-maps/api';
+import { SmartTabsProvider } from '$ui/components/shared/smart-tabs/smart-tabs-provider';
+import { SmartTabs } from '$ui/components/shared/smart-tabs/smart-tabs';
+import { SmartTabBody } from '$ui/components/shared/smart-tabs/smart-tab-body';
+import { GeofenceSidebarCard } from '$ui/components/sections/dashboard/live/components/geofence-sidebar-card';
+import { useGeofences } from '$logic/state/geofences';
 
 const drawerBleeding = 24;
 
@@ -57,21 +59,30 @@ const Page: NextPage<PageProps> = () => {
   useVehiclesService();
 
   const vehicles = useVehicles();
+  const geofences = useGeofences();
   const isDesktop = useIsDesktop();
   const vehicleStatusToColor = useVehicleStatusToColorDict();
 
   const scrollbarRef = useRef<Scrollbars>(null);
 
   const [selectedVehicleId, setSelectedVehicleId] = useState<string>();
+  const [selectedGeofenceId, setSelectedGeofenceId] = useState<string>();
   const [open, setOpen] = useState(false);
   const [filter, setFilter] = useState<string>('');
   const [focusedVehicleId, setFocusedVehicleId] = useState<string>();
   const [hiddenVehiclesIds, setHiddenVehiclesIds] = useState<string[]>([]);
+  const [focusedGeofenceId, setFocusedGeofenceId] = useState<string>();
+  const [hiddenGeofencesIds, setHiddenGeofencesIds] = useState<string[]>([]);
   const [map, setMap] = useState<google.maps.Map>();
   const [trip, setTrip] = useState<TripPoint[]>([]);
 
   const toggleFocusedVehicle = useCallback(
     (id: string) => setFocusedVehicleId(v => (v === id ? undefined : id)),
+    []
+  );
+
+  const toggleFocusedGeofence = useCallback(
+    (id: string) => setFocusedGeofenceId(v => (v === id ? undefined : id)),
     []
   );
 
@@ -86,7 +97,17 @@ const Page: NextPage<PageProps> = () => {
     []
   );
 
+  const selectGeofence = useMemoizedCallback(
+    (vehicleId: string) => () => {
+      setSelectedVehicleId(vehicleId);
+      const el = document.getElementById(vehicleId);
+      if (el) scrollbarRef.current?.scrollTop(el.offsetTop - 8);
+    },
+    []
+  );
+
   const unSelectVehicle = useCallback(() => setSelectedVehicleId(undefined), []);
+  const unSelectGeofence = useCallback(() => setSelectedGeofenceId(undefined), []);
 
   const toggleDrawer = useCallback(
     (newOpen: boolean) => () => {
@@ -98,6 +119,14 @@ const Page: NextPage<PageProps> = () => {
   const toggleHideVehicle = useCallback(
     (id: string) =>
       setHiddenVehiclesIds(ids =>
+        ids.includes(id) ? ids.filter(d => d !== id) : [...ids, id]
+      ),
+    []
+  );
+
+  const toggleHideGeofence = useCallback(
+    (id: string) =>
+      setHiddenGeofencesIds(ids =>
         ids.includes(id) ? ids.filter(d => d !== id) : [...ids, id]
       ),
     []
@@ -125,6 +154,19 @@ const Page: NextPage<PageProps> = () => {
         return false;
       }),
     [vehicles, filter]
+  );
+
+  const filteredGeofences = useMemo(
+    () =>
+      geofences.filter(geofence => {
+        const lowerFilter = filter.toLowerCase();
+        const name = geofence.name.toLowerCase();
+        const type = geofence.type.toLowerCase();
+
+        if (name.includes(lowerFilter) || type.includes(lowerFilter)) return true;
+        return false;
+      }),
+    [geofences, filter]
   );
 
   const vehiclesCards = useMemo(
@@ -173,6 +215,31 @@ const Page: NextPage<PageProps> = () => {
     ]
   );
 
+  const geofencesCards = useMemo(
+    () =>
+      filteredGeofences.map(geofence => (
+        <GeofenceSidebarCard
+          key={geofence.id}
+          id={geofence.id}
+          name={geofence.id}
+          type={geofence.type}
+          focused={geofence.id === focusedGeofenceId}
+          selected={geofence.id === selectedGeofenceId}
+          hidden={hiddenGeofencesIds.includes(geofence.id)}
+          setFocus={toggleFocusedGeofence}
+          toggleHide={toggleHideGeofence}
+        />
+      )),
+    [
+      filteredGeofences,
+      focusedGeofenceId,
+      selectedGeofenceId,
+      hiddenGeofencesIds,
+      toggleFocusedGeofence,
+      toggleHideGeofence,
+    ]
+  );
+
   const vehiclesMarkers = useMemo(
     () =>
       filteredVehicles
@@ -211,19 +278,38 @@ const Page: NextPage<PageProps> = () => {
 
   const content = useMemo(
     () => (
-      <>
-        <Box sx={{ padding: 1 }}>
-          <TextField label='Filter' fullWidth onChange={handleFilterChange} />
+      <SmartTabsProvider initialTabKey='vehicles'>
+        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+          <SmartTabs>
+            <Tab label='Vehicles' value='vehicles' />
+            <Tab label='Geofences' value='geofences' />
+          </SmartTabs>
         </Box>
-        <ShadowScrollbar ref={scrollbarRef} useFlex autoHide>
-          <Stack gap={1} sx={{ padding: 1 }}>
-            {vehiclesCards}
-          </Stack>
-        </ShadowScrollbar>
-      </>
+        <SmartTabBody value='vehicles' index={0}>
+          <Box sx={{ padding: 1 }}>
+            <TextField label='Filter' fullWidth onChange={handleFilterChange} />
+          </Box>
+          <ShadowScrollbar ref={scrollbarRef} useFlex autoHide>
+            <Stack gap={1} sx={{ padding: 1 }}>
+              {vehiclesCards}
+            </Stack>
+          </ShadowScrollbar>
+        </SmartTabBody>
+        <SmartTabBody value='geofences' index={1}>
+          <Box sx={{ padding: 1 }}>
+            <TextField label='Filter' fullWidth onChange={handleFilterChange} />
+          </Box>
+          <ShadowScrollbar ref={scrollbarRef} useFlex autoHide>
+            <Stack gap={1} sx={{ padding: 1 }}>
+              {geofencesCards}
+            </Stack>
+          </ShadowScrollbar>
+        </SmartTabBody>
+      </SmartTabsProvider>
     ),
-    [handleFilterChange, vehiclesCards]
+    [geofencesCards, handleFilterChange, vehiclesCards]
   );
+
   const mockTrip = useMemo(
     () => ({
       trip,
@@ -253,6 +339,7 @@ const Page: NextPage<PageProps> = () => {
     }),
     [trip]
   );
+
   useEffect(() => {
     (window as any).mockTrip = mockTrip;
   }, [mockTrip]);
@@ -272,12 +359,7 @@ const Page: NextPage<PageProps> = () => {
   return (
     <RootContainer>
       <MapContainer>
-        <GoogleMaps
-          libraries={googleMapsLibraries}
-          onLoad={setMap}
-          onRightClick={onRightClick}
-        >
-          <DrawingManagerF />
+        <GoogleMaps onLoad={setMap} onRightClick={onRightClick}>
           {selectedVehicle?.location && (
             <VehicleInfoWindow
               onCloseClick={unSelectVehicle}

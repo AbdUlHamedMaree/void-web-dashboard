@@ -22,31 +22,56 @@ export const VehicleStatusToThemeColor: Record<VehicleStatusUnion, string> = {
 };
 
 export type VehicleMetaModel = {
-  speed?: number; // (0 - 350) km/h
-  frontLeftDoorOpen?: 0 | 1; // (yes - no)
-  frontRightDoorOpen?: 0 | 1; // (yes - no)
-  rearLeftDoorOpen?: 0 | 1; // (yes - no)
-  rearRightDoorOpen?: 0 | 1; // (yes - no)
-  trunkDoorOpen?: 0 | 1; // (yes - no)
-  engineCoverOpen?: 0 | 1; // (yes - no)
-  roofOpen?: 0 | 1; // (yes - no)
-  loadWeight?: number; // (0 - 16772215) kg
-  engineLoad?: number; // (0 - 100) %
-  engineRPM?: number; // (0 - 16384) rpm
-  engineTemperature?: number; // (-600 - 1270) C
-  engineOilTemperature?: number; // (0 - 215) C
-  engineOilLevel?: number; // (0 - 1) floating point
-  engineWorkTime?: number; // (0 - 1677215) min
-  batteryVoltage?: number; // (0 - 65535) V
-  batteryCurrent?: number; // (0 - 65535) A
-  batteryLevel?: number; // (0 - 100) %
-  batteryChargeState?: 0 | 1; // (yes - no)
-  batteryTemperature?: number; // (-32768	- 32767) C
-  totalOdometer?: number; // (0 - 2147483647) m
-  tripOdometer?: number; // (0 - 2147483647) m
-  fuelLevel?: number; // (0 - 100) %
-  fuelUsedGps?: number; // (0 - 4294967295) l
-  fuelRateGps?: number; // (0 - 32767) 	l/100km
+  /** (0 - 350) km/h */
+  speed?: number;
+  /** (yes - no) */
+  frontLeftDoorOpen?: 0 | 1;
+  /** (yes - no) */
+  frontRightDoorOpen?: 0 | 1;
+  /** (yes - no) */
+  rearLeftDoorOpen?: 0 | 1;
+  /** (yes - no) */
+  rearRightDoorOpen?: 0 | 1;
+  /** (yes - no) */
+  trunkDoorOpen?: 0 | 1;
+  /** (yes - no) */
+  engineCoverOpen?: 0 | 1;
+  /** (yes - no) */
+  roofOpen?: 0 | 1;
+  /** (0 - 16772215) kg */
+  loadWeight?: number;
+  /** (0 - 100) % */
+  engineLoad?: number;
+  /** (0 - 16384) rpm */
+  engineRPM?: number;
+  /** (-600 - 1270) C */
+  engineTemperature?: number;
+  /** (0 - 215) C */
+  engineOilTemperature?: number;
+  /** (0 - 1) floating point */
+  engineOilLevel?: number;
+  /** (0 - 1677215) min */
+  engineWorkTime?: number;
+  /** (0 - 65535) V */
+  batteryVoltage?: number;
+  /** (0 - 65535) A */
+  batteryCurrent?: number;
+  /** (0 - 100) % */
+  batteryLevel?: number;
+  /** (yes - no) */
+  batteryChargeState?: 0 | 1;
+  /** (-32768	- 32767) C */
+  batteryTemperature?: number;
+  /** (0 - 2147483647) m */
+  totalOdometer?: number;
+  /** (0 - 2147483647) m */
+  tripOdometer?: number;
+  /** (0 - 100) % */
+  fuelLevel?: number;
+  /** (0 - 4294967295) l */
+  fuelUsedGps?: number;
+  /** (0 - 32767) 	l/100km */
+  fuelRateGps?: number;
 };
 
 export type PureVehicleModel = {

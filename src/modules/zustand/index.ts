@@ -3,7 +3,7 @@ import type { UseBoundStore } from 'zustand/react';
 import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
 import type { Draft } from 'immer';
-import produce from 'immer';
+import { produce } from 'immer';
 import type { AnyObject, StateCreator } from './types';
 
 /**

@@ -5,21 +5,20 @@ import { mockDriver } from '$logic/models/driver';
 import { mockUser } from '$logic/models/user';
 import type { VehicleModel } from '$logic/models/vehicle';
 import { mockVehicleMeta } from '$logic/models/vehicle';
-import { mockPureVehicle } from '$logic/models/vehicle';
 import { useDevicesStore } from '$logic/state/devices';
 import { useDriversStore } from '$logic/state/drivers';
 import { useUsersStore } from '$logic/state/users';
 import { useVehiclesStore } from '$logic/state/vehicles';
-import { cycledTripIdToCycledTrip } from '$logic/_mock/cycle-vehicle-trips';
 import { initialRoles, useRolesStore } from '$logic/state/roles';
 import * as m from '@mrii/mock';
 import { vehicleTripIdToVehicleTrip } from '$logic/_mock/vehicles-trips';
 import type { TripModel } from '$logic/models/trip';
 import { mockTrip, mockTripPoint } from '$logic/models/trip';
 import { useTripsStore } from '$logic/state/trips';
+import { mockedVehicles } from '$logic/_mock/vehicles';
 
 export const mockData = () => {
-  const count = m.number(5, 10);
+  const count = 4;
 
   const drivers: DriverModel[] = [];
   const vehicles: VehicleModel[] = [];
@@ -28,23 +27,9 @@ export const mockData = () => {
   const trips: TripModel[] = [];
 
   for (let index = 0; index < count; index++) {
+    const pureVehicle = mockedVehicles[index];
+
     const pureDriver = mockDriver();
-    const mockCycledTrip = cycledTripIdToCycledTrip[index as 1];
-    const pureVehicle = mockPureVehicle(
-      mockCycledTrip
-        ? {
-            _mock: {
-              tripId: index,
-              currentIndex: 0,
-            },
-            location: mockCycledTrip[0],
-            rotation: mockCycledTrip[0].rotation,
-            status: 'moving',
-          }
-        : {
-            status: 'stopped',
-          }
-    );
     const pureDevice = mockPureDevice();
 
     const driver: DriverModel = {
@@ -69,7 +54,6 @@ export const mockData = () => {
     devices.push(device);
 
     const vehicleTrip = vehicleTripIdToVehicleTrip[index as 0];
-    console.log({ vehicleTrip });
     if (!vehicleTrip) continue;
 
     const trip = mockTrip({

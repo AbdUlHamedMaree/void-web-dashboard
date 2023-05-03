@@ -5,6 +5,7 @@ import {
   AirlineSeatReclineNormalOutlined,
   DirectionsCarOutlined,
   HistoryOutlined,
+  InterestsOutlined,
   LiveTv,
   MemoryOutlined,
   PeopleAltOutlined,
@@ -73,6 +74,14 @@ export const useNavigationConfig = () => {
             icon: <MemoryOutlined />,
           },
           'Device'
+        ),
+        getResourceConfig(
+          {
+            title: 'Geofences',
+            path: '/dashboard/geofences',
+            icon: <InterestsOutlined />,
+          },
+          'Geofence'
         ),
         ability.can('read', 'TripsHistory') && {
           title: 'Trips History',

@@ -1,4 +1,4 @@
-import { isNil } from '$modules/checks';
+import { stringifyUrlObject } from '$modules/stringify-url-object';
 import type { LinkProps } from 'next/link';
 import type { UrlObject } from 'url';
 
@@ -43,6 +43,14 @@ export type AppRoutesMap = {
       list: PathnameUrlObjectFunction;
       new: PathnameUrlObjectFunction;
     };
+    geofences: {
+      '[id]': {
+        edit: PathnameUrlObjectFunction;
+        view: PathnameUrlObjectFunction;
+      };
+      list: PathnameUrlObjectFunction;
+      new: PathnameUrlObjectFunction;
+    };
     live: {
       index: PathnameUrlObjectFunction;
     };
@@ -68,47 +76,32 @@ export type AppRoutesMap = {
       list: PathnameUrlObjectFunction;
       new: PathnameUrlObjectFunction;
     };
+    'vehicles-events': {
+      'green-driving': {
+        '[id]': {
+          view: PathnameUrlObjectFunction;
+        };
+      };
+      list: PathnameUrlObjectFunction;
+    };
   };
 };
-
-const applyQuery = (pathname: string, query?: PathnameUrlObject['query']) => {
-  if (!query || typeof query !== 'object') return pathname;
-
-  return Object.entries(query).reduce(
-    (acc, [key, value]) =>
-      !isNil(value) ? pathname.replaceAll(`[${key}]`, value.toString()) : pathname,
-    pathname
-  );
-};
-
-const applySearch = (pathname: string, search?: string) => {
-  if (!search) return pathname;
-  if (search.startsWith('?')) return pathname + search;
-  return pathname + '?' + search;
-};
-
-const getLink = ({
-  pathname,
-  query,
-  search,
-}: Pick<PathnameUrlObject, 'pathname' | 'query' | 'search'>) =>
-  applySearch(applyQuery(pathname, query), search);
 
 const api = <TMap = AnyRoutesMap>(path: (string | symbol)[] = []) =>
   new Proxy(
     (args => {
       const pathname = '/' + path.join('/');
 
-      const link = getLink({
+      const pureUrlObject = {
         pathname,
-        query: args?.query,
-        search: args?.search,
-      });
+        ...args,
+      };
+
+      const link = stringifyUrlObject.relative(pureUrlObject);
 
       const urlObject = {
-        pathname,
         link,
-        ...args,
+        ...pureUrlObject,
       };
 
       return urlObject;

@@ -1,5 +1,6 @@
 import type { DeviceModel } from '$logic/models/device';
 import type { DriverModel } from '$logic/models/driver';
+import type { GeofenceModel } from '$logic/models/geofence';
 import type { RoleModel } from '$logic/models/role';
 import type { UserModel } from '$logic/models/user';
 import type { VehicleModel } from '$logic/models/vehicle';
@@ -30,9 +31,12 @@ export type AppCaslSubjects =
   | DeviceModel
   | 'Role'
   | RoleModel
+  | GeofenceModel
+  | 'Geofence'
   // Pages
   | 'LivePreview'
   | 'TripsHistory'
+  | 'VehicleEvents'
   | 'all';
 
 export type AppCaslPossibleAbilities = [AppCaslActions, AppCaslSubjects];

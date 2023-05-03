@@ -20,6 +20,7 @@ import { SessionProvider } from 'next-auth/react';
 
 import 'react-toastify/dist/ReactToastify.css';
 import 'nprogress/nprogress.css';
+import { useNotificationService } from '$logic/hooks/use-notification-service';
 
 const url = process.env.NEXT_PUBLIC_SITE_URL!;
 
@@ -74,6 +75,9 @@ const App: React.FC<AppProps> = ({
   router,
   emotionCache = clientSideEmotionCache,
 }) => {
+  // TODO: move to settings later.
+  useNotificationService();
+
   const [queryClient] = useState(() => new QueryClient());
 
   const Layout: React.ComponentType<{ children?: React.ReactNode }> = useMemo(
