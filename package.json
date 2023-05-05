@@ -2,7 +2,6 @@
   "name": "void-web-dashboard",
   "version": "0.1.0",
   "private": true,
-  "type": "module",
   "sideEffect": false,
   "scripts": {
     "_predev": "yarn graphql-codegen",
