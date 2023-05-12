@@ -1,12 +1,16 @@
+import { mockedGeofences } from '$logic/_mock/geofences';
 import type { GeofenceModel } from '$logic/models/geofence';
 import { createEntityStore } from '$logic/utils/create-entity-store';
 import { useCallback, useMemo } from 'react';
 
-export const useGeofencesStore = createEntityStore('geofence')<GeofenceModel>({
-  persist: true,
-  devtools: true,
-  name: 'void-mocked-geofences',
-});
+export const useGeofencesStore = createEntityStore('geofence')<GeofenceModel>(
+  {
+    persist: true,
+    devtools: true,
+    name: 'void-mocked-geofences',
+  },
+  mockedGeofences
+);
 
 export const useGeofences = () => useGeofencesStore(useCallback(s => s.geofences, []));
 export const useGeofence = (id?: unknown) =>

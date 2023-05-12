@@ -1,13 +1,16 @@
-import { AppAbilityBuilder } from '$logic/libs/casl';
+import { mockedRoles } from '$logic/_mock/roles';
 import type { RoleModel } from '$logic/models/role';
 import { createEntityStore } from '$logic/utils/create-entity-store';
 import { useCallback, useMemo } from 'react';
 
-export const useRolesStore = createEntityStore('role')<RoleModel>({
-  persist: true,
-  devtools: true,
-  name: 'void-mocked-roles',
-});
+export const useRolesStore = createEntityStore('role')<RoleModel>(
+  {
+    persist: true,
+    devtools: true,
+    name: 'void-mocked-roles',
+  },
+  mockedRoles
+);
 
 export const useRoles = () => useRolesStore(useCallback(s => s.roles, []));
 export const useRole = (id?: unknown) =>
@@ -50,46 +53,3 @@ export const useRolesOptions = () => {
     [roles]
   );
 };
-
-const superAdmin = new AppAbilityBuilder();
-superAdmin.can('manage', 'all');
-
-const admin = new AppAbilityBuilder();
-admin.can('manage', 'all');
-admin.cannot('manage', 'Role');
-admin.cannot('manage', 'User', { 'role.id': { $eq: 'super_admin' } });
-
-const manager = new AppAbilityBuilder();
-manager.can('manage', 'all');
-manager.cannot('manage', 'Role');
-manager.cannot('manage', 'User');
-
-export const initialRoles: RoleModel[] = [
-  {
-    id: 'super_admin',
-    name: 'Super Admin',
-    rules: superAdmin.rules,
-  },
-  {
-    id: 'admin',
-    name: 'Admin',
-    rules: admin.rules,
-  },
-  {
-    id: 'manager',
-    name: 'Manager',
-    rules: manager.rules,
-  },
-];
-
-export const emailToRole = {
-  'super.admin@void.com': initialRoles[0],
-  'admin@void.com': initialRoles[1],
-  'manager@void.com': initialRoles[2],
-};
-
-export const appMockEmails = [
-  'super.admin@void.com',
-  'admin@void.com',
-  'manager@void.com',
-];

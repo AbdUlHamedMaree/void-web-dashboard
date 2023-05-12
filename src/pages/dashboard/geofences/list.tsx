@@ -47,7 +47,7 @@ const Page: NextPage<PageProps> = () => {
     >
       <TextColumn field='id' />
       <TextColumn field='name' />
-      <TextColumn field='description' />
+      <TextColumn field='description' width={230} />
       <TextColumn field='type' />
       <AppActionsColumn
         onShow={showHandler}

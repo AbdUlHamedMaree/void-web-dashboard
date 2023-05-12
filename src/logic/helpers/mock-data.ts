@@ -9,13 +9,13 @@ import { useDevicesStore } from '$logic/state/devices';
 import { useDriversStore } from '$logic/state/drivers';
 import { useUsersStore } from '$logic/state/users';
 import { useVehiclesStore } from '$logic/state/vehicles';
-import { initialRoles, useRolesStore } from '$logic/state/roles';
 import * as m from '@mrii/mock';
 import { vehicleTripIdToVehicleTrip } from '$logic/_mock/vehicles-trips';
 import type { TripModel } from '$logic/models/trip';
 import { mockTrip, mockTripPoint } from '$logic/models/trip';
 import { useTripsStore } from '$logic/state/trips';
 import { mockedVehicles } from '$logic/_mock/vehicles';
+import { mockedRoles } from '$logic/_mock/roles';
 
 export const mockData = () => {
   const count = 4;
@@ -83,13 +83,11 @@ export const mockData = () => {
 
   useTripsStore.setState({ trips });
 
-  useRolesStore.setState({ roles: initialRoles });
-
   useUsersStore.setState({
     users: m.array(
       () =>
         mockUser({
-          role: initialRoles[m.pick(1, 2)],
+          role: mockedRoles[m.pick(1, 2)],
         }),
       m.number(3, 6)
     ),

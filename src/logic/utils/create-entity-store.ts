@@ -8,7 +8,10 @@ export const createEntityStore =
     entity: TName,
     plural: TPlural = 's' as TPlural
   ) =>
-  <TEntity extends { id: unknown }>(options?: CreateStoreOptions) => {
+  <TEntity extends { id: unknown }>(
+    options?: CreateStoreOptions,
+    defaultState: TEntity[] = []
+  ) => {
     type EntityKey = `${TName}${TPlural}`;
     type CapitalizedName = Capitalize<TName>;
 
@@ -31,7 +34,7 @@ export const createEntityStore =
 
     return createStore(options)<State, Actions>(
       {
-        [entityKey]: [],
+        [entityKey]: defaultState,
       } as unknown as State,
       (set, get) =>
         ({

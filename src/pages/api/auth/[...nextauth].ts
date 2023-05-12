@@ -1,5 +1,5 @@
 import { mockUser } from '$logic/models/user';
-import { appMockEmails, emailToRole } from '$logic/state/roles';
+import { appMockEmails, emailToRole } from '$logic/_mock/roles';
 import { omit } from '$modules/object-fns';
 import { routes } from '$routes';
 import chalk from 'chalk';
